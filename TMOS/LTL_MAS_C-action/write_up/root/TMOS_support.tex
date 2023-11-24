@@ -1,0 +1,88 @@
+\documentclass[10pt, journal]{IEEEtran}
+
+
+
+%In case you encounter the following error:
+%Error 1010 The PDF file may be corrupt (unable to open PDF file) OR
+%Error 1000 An error occurred while parsing a contents stream. Unable to analyze the PDF file.
+%This is a known problem with pdfLaTeX conversion filter. The file cannot be opened with acrobat reader
+%Please use one of the alternatives below to circumvent this error by uncommenting one or the other
+%\pdfobjcompresslevel=0
+%\pdfminorversion=4
+
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+% numbers option provides compact numerical references in the text.
+% \usepackage{natbib}
+\usepackage{times}
+\usepackage{multicol}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{amsmath, amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{standalone}
+\usepackage{booktabs}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{mdframed}
+\usepackage{fancyvrb}
+\usepackage{soul}
+\usepackage{dsfont,mathabx}
+\usepackage{array, booktabs}
+\usepackage{threeparttable}
+\usepackage{multirow}
+
+\usepackage{subfigure}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+\newtheorem{problem}{Problem}
+\newtheorem{definition}{Definition}
+
+% GENERAL
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+\newcommand{\improve}[1]{\textcolor{cyan}{IMPROVE: #1}}
+\newcommand{\note}[1]{\textcolor{blue}{NOTE: #1}}
+\newcommand{\question}[1]{\textcolor{orange}{Q: #1}}
+\newcommand{\todoliu}[1]{\textcolor{green}{TODOLIU: #1}}
+\newcommand{\noteliu}[1]{\textcolor{green}{NOTELIU: #1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+
+
+\title{
+Supplementary Material for ``Time Minimization and Online Synchronization for Multi-agent Systems under
+Collaborative Temporal Tasks''
+}
+
+\author{Zesen Liu, Meng Guo and Zhongkui Li% <-this % stops a space
+\thanks{The authors are with the State Key Laboratory
+    for Turbulence and Complex Systems,
+    Department of Mechanics and Engineering Science,
+    College of Engineering, Peking University, Beijing 100871, China.
+}% <-this % stops a space
+}
+
+\begin{document}
+
+%%========================================
+\maketitle
+
+%%========================================
+\input{contents/appendices.tex}
+%%========================================
+
+
+%=========================================
+\bibliographystyle{IEEEtran}
+\bibliography{contents/references}
+%=========================================
+%\input{contents/appendices.tex}
+\end{document}

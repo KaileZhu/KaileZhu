@@ -1,0 +1,26 @@
+\begin{abstract}
+Multi-agent systems can be efficient when solving a team-wide task in a concurrent manner.
+However, without proper synchronization, the correctness of the combined behavior is hard to guarantee,
+such as to follow a specific ordering of subtasks or to perform a simultaneous collaboration.
+This work addresses the minimum-time task planning problem for multi-agent systems
+under complex global tasks stated as syntactically co-safe Linear Temporal Logic (sc-LTL) formulas.
+%这里改成scLTL
+These tasks include the temporal and spatial requirements on both independent local actions and direct sub-team collaborations.
+The proposed solution is an anytime algorithm that combines the partial-ordering analysis
+of the underlying task automaton for task decomposition,
+and the branch and bound (BnB) search method for task assignment.
+\textcolor{blue}{We analyze the soundness, completeness and optimality regarding the minimal completion time.}
+%Analyses of its soundness, completeness and optimality as the minimal completion time are provided.
+\textcolor{blue}{We show that} a feasible and near-optimal solution is quickly reached while the search continues within the time budget.
+Furthermore, to handle fluctuations in task duration and agent failures during online execution,
+\textcolor{blue}{we propose} an adaptation algorithm to synchronize execution status and re-assign unfinished subtasks dynamically to maintain correctness and optimality.
+\textcolor{blue}{Both algorithms are validated over systems of more than $10$ agents via numerical
+simulations and hardware experiments, against several established baselines.}
+\end{abstract}
+
+
+%==============
+\begin{keyword}
+Networked Robots, Linear Temporal Logic, Task Coordination, Anytime Search.
+\end{keyword}
+%=============================

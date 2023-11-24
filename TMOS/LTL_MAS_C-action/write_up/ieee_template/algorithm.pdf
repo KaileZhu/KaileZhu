@@ -1,0 +1,83 @@
+\def\SetClass{article}
+\documentclass{\SetClass}
+\usepackage[ruled,vlined]{algorithm2e}
+\begin{document}
+	\begin{algorithm}[H]
+		\SetAlgoLined
+		\KwData{this text}
+		\KwResult{how to write algorithm with \LaTeX2e }
+		
+		initialization\;
+		\While{not at end of this document}{
+			read current\;
+			\eIf{understand}{
+				go to next section\;
+				current section becomes this one\;
+			}{
+				go back to the beginning of current section\;
+			}
+		}
+		\caption{How to write algorithms}
+	\end{algorithm}
+
+
+\begin{algorithm}[H]
+	\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+	\label{alg:2}
+	\SetAlgoLined
+	\Input{The NBA $\mathcal{B}$}
+	\Output{set of Partial order set $\mathcal{P}=\{P_i\}$}
+	\For {$q_0$ in $Q_0$}{ 
+	 $stack=[q_0]$,$S_{visit}=[]$,$10$
+	 
+	\While {$stack\ne \Phi$}{
+	 fetch the last one of $stack$ as $l_{s}$ and remove it
+	 
+	Find the successors of $l_{s}(-1)$ as $nodes$
+	
+	\For {$node$ in $nodes$}{
+	\If {$node$ not in $l_{s}$}{
+     $\hat{l}_{s}=[l_{s},node]$,add $\hat{l}_{s}$ to $stack$
+	
+	\If {$\hat{l}_{s}$ is accepting $\And$ $ \hat{l}_{s}\not\in S_{visit}$ }{
+$P=P\_O\_S(\mathcal{B},\hat{l}_{s})$,add $P$ to $\mathcal{P}$
+	
+	 add $\mathcal{S}_{accept}$ to $S_{visit}$
+	 
+}
+}
+}
+}
+}
+Return $\mathcal{S}$
+\caption{anytime algorithm}
+\end{algorithm}
+\begin{algorithm}[H]
+		\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+	\caption{P\_O\_S}
+	\label{alg:1}
+		\Input{ The NBA $\mathcal{B}$, a feasible sequence $S$}
+		\Output{  Partial order sets $P$}
+		
+		 Set the anchor function $\Omega$ with $S$
+		 
+	 $\mathcal{N}_{new}=\{[1:n]\}$\# n is the length of $S$
+		\While{$\mathcal{N}_{new}\ne\Phi$}
+		 Fetch one sequence $\hat{N}$ from $\mathcal{N}_{new}$
+		 add $\Omega(\hat{N})$ to $\mathcal{S}_{accept}$
+		\For{$i$ in $1:n-1$ }
+		\State $\hat{N'}=\hat{N}$, $\hat{N'}(i)=\hat{N}(i+1)$, $\hat{N'}(i+1)=\hat{N}(i)$
+		
+		\If {$\Omega(\hat{N'})$ is accepting in $\mathcal{B}$ $\And$ $\Omega(\hat{N'}(i))\ne\Omega(\hat{N'}(i+1))$}
+		
+		\State add $(\hat{N'}(i),\hat{N}(i+1))$ to $C_{parallel}$
+		\State add $ \hat{N'}$ to $\mathcal{N}_{new}$
+		\Else {  add $(N'(i),N(i+1))$ to $C_{partial}$}
+		\EndIf
+		\EndFor
+		\State remove $\hat{N}$ from $\mathcal{N}_{new}$ 
+		\EndWhile
+		\State Return $P=(\Omega,C_{parallel},C_{partial},\mathcal{S}_{accept})$
+	\end{algorithmic}
+\end{algorithm}
+\end{document}

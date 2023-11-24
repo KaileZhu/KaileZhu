@@ -1,0 +1,137 @@
+%==============================
+\section{Introduction}\label{sec:introduction}
+% Overview of MAS coordination
+Multi-agent systems consist of a fleet of homogeneous or heterogeneous robots,
+such as autonomous ground vehicles and aerial vehicles.
+They are often deployed to accomplish tasks that are otherwise too inefficient or even infeasible for a single robot in~\citep{arai2002advances}.
+First,
+by allowing the robots to move and act concurrently,
+the overall efficiency of the team can be significantly improved.
+For instance,
+a fleet of delivery vehicles can drastically reduce the delivery time~\citep{toth2002overview};
+and a team of drones can surveil a large terrain and detect poachers~\citep{cliff2015online}.
+Second,
+by enabling multiple robots to directly collaborate on a task,
+capabilities of the team can be greatly extended.
+For instance,
+several mobile manipulators can transport objects that are otherwise too heavy for one~\citep{fink2008multi};
+and a team of mobile vehicles can collaboratively herd moving targets via formation~\citep{varava2017herding}.
+% Temporal tasks as LTL formulas
+Furthermore, to specify these complex tasks,
+many recent work propose to use formal languages such as Linear Temporal Logic (LTL)
+formulas ~\citep{baier2008principles}, as an intuitive yet powerful way to describe
+both spatial and temporal requirements on the team behavior;
+see~\citep{ulusoy2013optimality, kantaros2020stylus, schillinger2018simultaneous, guo2018multirobot} for examples.
+
+
+%========================================
+\begin{table*}[t]
+  \begin{center}
+    \caption{Comparison of related work as discussed in Sec.~\ref{subsec:multi-ltl},
+  regarding the problem formulation and key features.}
+\label{table:compare}
+%--------------------
+\begin{adjustbox}{width=0.9\linewidth}
+{\def\arraystretch{1.2}\tabcolsep=3pt
+\begin{tabular}{cccccccc}
+\toprule
+Ref. & Syntax & Collaboration & Objective  & Solution & Anytime & Synchronization & Adaptation \\ \midrule
+\citep{guo2015multi, tumova2016multi} & Local-LTL & No & Summed Cost & Dijkstra & No & Event-based  & Yes\\
+\citep{guo2016task} & Local-LTL & Yes & Summed Cost & Dijkstra &  No & Event-based  & Yes \\
+\citep{kantaros2020stylus, luo2021abstraction} & Global-LTL & No & Summed Cost & Sampling & Yes & All-time & No \\
+\citep{schillinger2018simultaneous} & Global-LTL & No & Balanced & Martins' Alg.  & No & None & No \\
+\citep{luo2021temporal} & Global-LTL & Yes & Summed Cost & MILP & No & All-time & No \\
+\citep{sahin2019multirobot, jones2019scratchs} & Global-cLTL & No & Summed Cost & MILP & No & Partial & No \\
+\textbf{Ours} & Global-LTL & Yes & Min Time & BnB & Yes & Event-based & Yes \\
+\bottomrule
+\end{tabular}%
+}
+\end{adjustbox}
+%--------------------
+\end{center}
+\end{table*}
+%========================================
+
+% Time minimization, computational complexity, anytime algorithm
+However, coordination of these robots to accomplish the desired task can result in great complexity,
+as the set of possible task assignments can be combinatorial with respect to the number of robots
+and the length of tasks~\citep{toth2002overview, LAVAEI2022110617}.
+\textcolor{blue}{This is particularly the case} when certain \textcolor{blue}{metrics} should be minimized,
+such as the completion time or the summed cost of all robots.
+There are many recent work obtain onsiderable results, e.g.,
+via optimal planning algorithms
+such as mixed integer linear programming (MILP) in~\citep{luo2021temporal,
+ sahin2019multirobot, jones2019scratchs},
+and search algorithms over state or solution space as
+in~\citep{kantaros2020stylus, schillinger2018simultaneous, luo2021abstraction}.
+Whereas being sound and optimal,
+many existing solutions are designed from an offline perspective,
+thus lacking in one of the following aspects that could be essential for robotic missions:
+(I) \emph{Real-time requirements}.
+Optimal solutions often take an unpredictable amount of time to compute,
+without any intermediate feedback.
+However, for many practical applications,
+good solutions that are generated fast and reliably are often more beneficial;
+(II) \emph{Synchronization} during plan execution.
+Many of the derived plans are assigned to the robots
+and executed independently without any synchronization among them,
+e.g., no coordination on the start and finish time of a subtask.
+Such procedure generally relies on a precise model of the underlying system
+such as traveling time and task execution time,
+and the assumption that no direct collaborations are required.
+Thus, any mismatch in the given model or dependency in the subtasks would lead to erroneous execution;
+(III) \emph{Online adaptation}.
+An optimal but static solution can not handle changes in the workspace or in the team during
+online execution, e.g., certain paths between subtasks are blocked, or some robots break down.
+
+
+% paper overview
+To overcome these challenges,
+this work takes into account the minimum-time task coordination problem of a team of heterogeneous robots.
+\textcolor{blue}{We specify the team-wise task as LTL formulas over the desired actions to perform at the
+desired regions of interest in the environment.}
+Such action can be independent that it can be done by one of these robots alone,
+or collaborative where several robots should collaborate to accomplish it.
+The objective is to find an optimal task policy for the team such that the completion time for the task is minimized.
+Due to the NP-completeness of this problem,
+the focus here is to design an anytime algorithm that returns the best solution within the given time budget.
+More specifically,
+the proposed algorithm interleaves between the partial ordering analysis
+of the underlying task automaton for task decomposition,
+and the branch and bound (BnB) search method for task assignment,
+\textcolor{blue}{Each of these two sub-routines is anytime-algorithm.}
+The proposed partial relations can be applied to non-instantaneous subtasks,
+thus providing a more general model for analyzing concurrent subtasks.
+Furthermore, the proposed lower and upper bounding methods during the BnB search
+significantly reduces the search space.
+\textcolor{blue}{We prove the completeness and soundness of the overall algorithm for the considered objective},
+and we also show empirically that algorithm can quickly reach a feasible and near-optimal solution.
+Besides,
+\textcolor{blue}{we propose an online synchronization protocol to handle fluctuations in the execution time},
+while ensuring that the partial ordering constraints are still respected.
+Lastly, to handle agent failures during the task execution,
+\textcolor{blue}{we propose an adaptation algorithm to synchronize execution
+status and re-assign unfinished subtasks
+to maintain correctness and optimality.}
+The effectiveness and advantages of the proposed algorithm
+are demonstrated rigorously via numerical simulations and hardware experiments,
+particularly over {large-scale} systems of more than $20$ robots and $10$ subtasks.
+
+
+%contribution
+The main contribution of this work is threefold:
+(I) it extends the existing work on temporal task planning to allow collaborative subtasks
+and the practical objective of minimizing task completion time;
+(II) it proposes an anytime algorithm that is sound, complete and optimal,
+which is particularly suitable for real-time applications where computation time is restricted;
+and (III) it provides a novel theoretical approach that combines the partial ordering
+analysis for task decomposition and the BnB search for task assignment.
+
+%structure
+The rest of the paper is organized as follows:
+Sec.~\ref{sec:related-work} reviews related work.
+The formal problem description is given in Sec.~\ref{sec:problem}.
+Main components of the proposed framework are presented in
+Secs.~\ref{subsec:initial-synthesis}-\ref{subsec:summary}.
+Experiment studies are shown in Sec.~\ref{sec:experiments},
+followed by conclusions and future work in Sec.~\ref{sec:conclusion}.

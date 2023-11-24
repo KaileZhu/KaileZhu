@@ -1,0 +1,70 @@
+%==============================
+\section{Algorithmic Summary}\label{subsec:summary}
+
+To summarize, the proposed planning algorithm in Alg.~\ref{alg:complete}
+can be used offline to synthesize the complete plan that
+minimizes the time for accomplishing the specified collaborative temporal tasks.
+During execution, the proposed online synchronization scheme can be applied to
+overcome uncertainties in the duration of certain transition or actions.
+Moreover, whenever one or several agents have failures, the proposed adaptation
+algorithm can be followed to re-assign the remaining unfinished tasks.
+In the rest of this section,
+we present the analysis of completeness, optimality and computational
+complexity for Alg.~\ref{alg:complete}.
+
+\begin{theorem}[Completeness]\label{theo:completeness}
+Given enough time, Alg.~\ref{alg:complete} can return the optimal
+assignment~$J^\star$ with minimum makespan~$T^\star$.
+\end{theorem}
+\begin{proof}
+ To begin with, Lemma~\ref{lemma:accepting-poset} shows that any R-poset obtained
+ by Alg.~\ref{alg:compute-poset} is accepting.
+ As proven in Lemma~\ref{lemma:complete-poset},
+ the underlying DFS search scheme finds all accepting runs of~$\mathcal{B}^-_{\varphi}$ via exhaustive search.
+ Thus, the complete R-posets~$\mathcal{P}_{\varphi}$ returned by
+ Alg.~\ref{alg:compute-poset} after termination is ensured to cover all
+ accepting words of the original task.
+ Moreover, Lemma~\ref{lemma:BnB-satisfying} shows that any assignment~$J^\star$
+ from the BnB Alg.~\ref{alg:BnB} satisfies the input R-poset
+ from Alg.~\ref{alg:compute-poset}.
+ Combining these two lemmas, it follows that any assignment~$J^\star$
+ from Alg.~\ref{alg:complete} satisfies the original task formula.
+ Second, since both Algs.~\ref{alg:compute-poset} and~\ref{alg:BnB} are exhaustive,
+ the complete set of R-posets and the complete search tree of all
+ possible assignments under each R-poset are searched for the optimal solution.
+ As a result, once both sets are enumerated, the derived assignment~$J^\star$ is
+ optimal over all possible solutions.
+\end{proof}
+
+The computational complexity of Alg.~\ref{alg:complete}
+is analyzed as follows. To generate one valid R-poset in Alg.~\ref{alg:compute-poset},
+the worst case time complexity is~$\mathcal{O}(M^2)$, where~$M$ is the maximum
+number of subtasks within the given task thus bounded by the number of edges in the
+pruned NBA~$\mathcal{B}^-_{\varphi}$.
+However, as mentioned in Sec.~\ref{subsec:nba},
+the size of~$\mathcal{B}$ is double exponential to the size of~$|\varphi|$.
+The number of R-posets is upper bounded by the number of accepting runs
+within~$\mathcal{B}^-_{\varphi}$, thus worst-case combinatorial to
+the number of nodes within~$\mathcal{B}^-_{\varphi}$.
+Furthermore, regarding the BnB search algorithm, the search space in the worst
+case is~$\mathcal{O}(M!\cdot N^M)$ as the possible sequence of all subtasks
+is combinatorial and the possible assignment is exponential to the
+number of agents.
+However, the worst-time complexity to compute the upper bound via Alg.~\ref{alg:BnB}
+remains~$\mathcal{O}(M\cdot N)$ as it greedily assigns the remaining subtasks,
+while the complexity to compute the lower bound is~$\mathcal{O}(M^2)$ as it relies on a BFS over
+the R-poset graph~$\mathcal{G}_{P_\varphi}$.
+How to decompose the overall formula while ensuring
+the satisfaction of each subformula, thus overcoming the bottleneck
+in the size of~$\mathcal{B}_{\varphi}$, remains our ongoing work.
+
+%------------------------------
+\begin{remark}\label{remark:anytime}
+The exponential complexity above is expected due to the NP-hardness of the considered problem.
+However, as emphasized earlier, the main contribution of the proposed algorithm
+is the anytime property.
+Namely, it can return the best solution within the given time budget,
+which is particularly useful for real-time applications where computation time is limited.
+\hfill  $\blacksquare$
+\end{remark}
+%------------------------------

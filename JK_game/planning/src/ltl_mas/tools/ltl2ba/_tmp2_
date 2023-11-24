@@ -1,0 +1,8 @@
+never { /* g && r1cd */
+accept_init:
+	if
+	:: (g && r1cd) -> goto accept_all
+	fi;
+accept_all:
+	skip
+}

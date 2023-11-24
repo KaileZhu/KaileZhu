@@ -1,0 +1,15 @@
+%==============================
+\section{Optimal Plan Synthesis}\label{subsec:initial-synthesis}
+%==============================
+The optimal plan synthesis aims to solve Problem~\ref{prob:formulation} offline.
+As mentioned previously in Sec.~\ref{subsec:multi-ltl},
+most related work requires the synchronized product between models of all agents,
+thus subject to exponential complexity.
+Instead, we propose an anytime algorithm that combines seamlessly the partial-ordering analyses
+of the underlying task automaton for task decomposition,
+and the branch and bound (BnB) search method for task assignment.
+In particular, it consists of three main components:
+(i) the pre-processing of the NBA associated with the global task;
+(ii) the partial ordering analyses of the processed task automaton;
+(iii) the BnB search algorithm that searches in the plan space
+given the partial ordering constraints.

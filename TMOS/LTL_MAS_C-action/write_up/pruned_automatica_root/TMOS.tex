@@ -1,0 +1,132 @@
+\documentclass[5p]{elsarticle}
+\usepackage{adjustbox}
+\usepackage{lineno,hyperref}
+\modulolinenumbers[20]
+\usepackage{times}
+\usepackage{multicol}
+%\usepackage[bookmarks=true]{hyperref}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{amsmath, amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{standalone}
+\usepackage{booktabs}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{mdframed}
+\usepackage{fancyvrb}
+\usepackage{soul}
+\usepackage{dsfont,mathabx}
+\usepackage{array, booktabs}
+\usepackage{threeparttable}
+\usepackage{multirow}
+
+\usepackage{subfigure}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}{corollary}
+\theoremstyle{definition}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+\newtheorem{problem}{Problem}
+\newtheorem{definition}{Definition}
+
+% GENERAL
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+\newcommand{\improve}[1]{\textcolor{cyan}{IMPROVE: #1}}
+\newcommand{\note}[1]{\textcolor{blue}{NOTE: #1}}
+\newcommand{\question}[1]{\textcolor{orange}{Q: #1}}
+\newcommand{\todoliu}[1]{\textcolor{orange}{TODOLIU: #1}}
+\newcommand{\noteliu}[1]{\textcolor{red}{NOTELIU: #1}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+
+\journal{Journal of \LaTeX\ Templates}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%% Elsevier bibliography styles
+%%%%%%%%%%%%%%%%%%%%%%%
+%% To change the style, put a % in front of the second line of the current style and
+%% remove the % from the second line of the style you would like to use.
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Numbered
+%\bibliographystyle{model1-num-names}
+
+%% Numbered without titles
+%\bibliographystyle{model1a-num-names}
+
+%% Harvard
+%\bibliographystyle{model2-names.bst}\biboptions{authoryear}
+
+%% Vancouver numbered
+%\usepackage{numcompress}\bibliographystyle{model3-num-names}
+
+%% Vancouver name/year
+%\usepackage{numcompress}\bibliographystyle{model4-names}\biboptions{authoryear}
+
+%% APA style
+%\bibliographystyle{model5-names}\biboptions{authoryear}
+
+%% AMA style
+%\usepackage{numcompress}\bibliographystyle{model6-num-names}
+
+%% `Elsevier LaTeX' style
+\bibliographystyle{elsarticle-num}
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Time Minimization and Online Synchronization\\ for Multi-agent Systems under \\
+	Collaborative Temporal Tasks}
+
+
+%% Group authors per affiliation:
+\author{Zesen Liu, Meng Guo and Zhongkui Li \fnref{myfootnote}}
+\address{State Key Laboratory for Turbulence and Complex Systems,Department of Mechanics and Engineering Science,\\
+	College of Engineering, Peking University, Beijing 100871, China.}
+\fntext[myfootnote]{	This work was supported by the National Natural Science Foundation
+	of China under grants 61973006, T2121002; and by Beijing Natural
+	Science Foundation under grant JQ20025.\\
+	E-mail: \texttt{1901111653@pku.edu.cn}(Zesen Liu), \texttt{meng.guo@pku.edu.\\cn}(Meng Guo), \texttt{zhongkli@pku.edu.cn}(Zhongkui Li).
+	}
+
+%% or include affiliations in footnotes: 
+
+%%========================================
+	
+%%========================================
+%\maketitle
+	
+%%========================================
+\input{contents/abstract.tex}
+\end{frontmatter}
+%%========================================
+	
+%%========================================
+\input{contents/introduction.tex}
+%%========================================
+%\input{contents/related_work.tex}	
+%%========================================
+\input{contents/preliminary.tex}
+%%========================================
+\input{contents/problem.tex}
+%%========================================
+\input{contents/solution.tex}
+%%========================================
+\input{contents/experiments.tex}
+%%========================================
+\input{contents/conclusion.tex}
+%%========================================
+%\input{TMOS.bbl}
+%=========================================
+%\bibliographystyle{IEEEtran}
+\bibliography{contents/references}
+%=========================================
+%\input{contents/appendices.tex}
+
+\end{document}

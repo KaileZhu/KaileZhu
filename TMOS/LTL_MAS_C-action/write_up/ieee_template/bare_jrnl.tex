@@ -1,0 +1,287 @@
+
+\documentclass[journal]{IEEEtran}
+\usepackage{cite}
+\usepackage{latexsym}
+\usepackage{stackrel}
+\ifCLASSINFOpdf
+  \usepackage[pdftex]{graphicx}
+\else
+ \usepackage[dvips]{graphicx}
+\fi
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+%\usepackage{algpseudocode}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\newtheorem{problem}{Problem}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+
+\renewcommand{\qedsymbol}{$\blacksquare$}
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+\title{Minimum-Time Cooperative Task Planning\\ in Temporal Logic Specifications }
+
+
+\author{Zesen Liu, Meng Guo, Zongkui Li}
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2015}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for IEEE Journals}
+\maketitle
+
+\begin{abstract}
+We consider the problem of optimally execution time in the tasks of global Linear Temporal Logic(LTL) specifications with cooperative actions.
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+IEEE, IEEEtran, journal, \LaTeX, paper, template.
+\end{IEEEkeywords}
+
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Introduction}
+\IEEEPARstart{T}he computation complexity of LTL task planning for Multi-agents system is a problem that always limits application. 
+So there are many efforts attempt to simplify computational process and most existed work focuses on the decomposing of a global specification to sub-task assigned to single agent. One of the technique called \emph{Partial Order Reduction} is to reduce the number of possible orderings and get a partially ordered set. The main purpose is to reduce the state space of the transition system and there are some difference between Computer Science and Multi-agent system technically. The former use it to find a reduced system consists of a single path while the latter want to find all the Partial Order relationship.
+\section{PRELIMINARIES}
+In the following, we provide a brief introduction of the concepts that form the basis for our presented work. 
+\subsection{Linear Temporal Logic}
+Linear Temporal Logic is a kind of formula language consisted of a set of atomic propositions $\mathcal{AP}$, the Boolean operators, conjunction $\land$ , disjunction $\lor$ and negation $\neg$, and temporal operators, next $\bigcirc$ , until $\mathcal{U}$, always $\Box$, eventually $\Diamond$. LTL formulas over the set $\mathcal{AP}$ of atomic proposition are formed according to the following grammar:\\
+$$ \varPhi ::= \top  |  a  |  \varphi_1\land\varphi_2   |  \varphi_1\lor\varphi_2   |  \neg\varphi  |   \bigcirc\varphi  | 
+  \varphi_1\mathcal{U}\varphi_2 | \Box\varphi_2 |\Diamond\varphi_2  $$\\
+where $a\in\mathcal{AP}$ and $\top$ means true.
+\subsection{Nondeterministic B\"{u}chi Automaton}
+Given an LTL formula $\varPhi$, \emph{a B\"{u}chi Automaton $\mathcal{B} $} constructed as\\
+$$\mathcal{B}=(Q,Q_0,\Sigma,\zeta,Q^F)$$\\
+where $Q$ is a set of states; $Q_0\subseteq Q$ is a set of initial states; $\Sigma$ is an input alphabet; $\zeta:Q\times\Sigma\rightarrow2^Q$ is a transition relation; $Q^F$ is a set of accepting states.
+A sequence of $\sigma=\sigma(1)\sigma(2)\cdots, \sigma(i)\in\Sigma$ is called an input \emph{word}. And a sequence $l=q_1q_2q_3\cdots,q_1\in Q_0$ is called a \emph{run}. A \emph{run} $l$ is called feasible if all the transition relations are satisfied along the \emph{run} $\sigma(t)\models\zeta(l(t),l(t+1))$ for all $t$ where $\models$ denotes Boolean satisfaction. A run $l$ is accepting if it is feasible and ends in an accepting state $q_n\in Q^F$. More deeply, an \emph{accepting} path can be written as the structure Prefix-suffix such that the prefix part starts from an initial state and ends in an accepting state
+ which executed only once and the suffix part is a circle around an accepting, which executed infinitely often.
+\begin{definition}[Essential Sequence]
+	Given a \emph{word} $\sigma=\sigma(1)\sigma(2)\cdots$, it is called \emph{essential} if and only if it describes a run $l$ in $\mathcal{B}$ and $\sigma(i)\backslash\{\pi\}\not\models\zeta(l(i),l(i+1))$ for all $\pi\in\sigma(i)$, $i.e.$ $\sigma$ contains only the required propositions.
+	%Schillinger et al.,2016a
+\end{definition}
+
+ To be more intuitive, we can define a graph $\mathcal{G}=(\nu,\varepsilon)$ to describe the $\mathcal{B}$ that $\nu$ is the vertices set and $\nu = Q$, $\varepsilon$ is the edges set and $\varepsilon:\nu\times\nu$.$\varepsilon$ stands for transition $\zeta$ that  $\forall\epsilon=(v_1,v_2)\in\varepsilon$ if and only if $\zeta(v_1,v_2)$ exists and we also defined the essential label function that for an edge $\epsilon=(v_1,v_2)$,$\zeta(\epsilon)=\zeta(v_1,v_2)$.
+So that $\mathcal{G}$ is a digraph and all \emph{path} begin from the initial vertices set is feasible and the feasible \emph{path} ended in the accepting states $Q^F$ is accepting \emph{path}. Given an accepting \emph{path} $l_{p}=v_1v_2v_3\cdots$, we can get the essential sequence $l_w=\zeta(v_1,v_2)\zeta(v_2,v_3)\cdots$ as the input symbols list of $l_p$.
+
+
+
+
+
+\section{Problem Formulation}
+ The problem will be discuss later with the following structure.
+\subsection{Multi-agent system}
+\subsection{Task specification}
+\subsection{problem definition}
+
+\section{Multi-agent Task Planning}
+Here we discuss how to plan a LTL fomula in Multi-agent system. 
+\subsection{Pruning the NBA}
+Given a LTL fomula $\varPhi$, we can generate an NBA $ \mathcal{B}$ with tools such as \emph{ltl2ba} and store it in a digraph $\mathcal{G}$. The complexity of $\mathcal{G}$ always grows exponentially with the number of nodes and edges. We focus to dispose the edges which have definite physical meaning that map to symbols which stand for tasks in Multi-agent system. To prune the potentially unnecessary edges in $\mathcal{G}$, we firstly define the redundant edge triangle property as follows:
+	\begin{definition}[Decomposable Edge property]
+		Given three different nodes $v_1,v_2,v_3$ in the NBA $\mathcal{G}=(\nu,\varepsilon)$, and the edges $\epsilon_{12}=(v_1,v_2)$,$\epsilon_{23}=(v_2,v_3)$,$\epsilon_{13}=(v_1,v_3)$ exist. We say that the edge $\epsilon_{13}$ is decomposable edge if:
+		$$\zeta(\epsilon_{12})\land \zeta(\epsilon_{12})=\zeta(\epsilon_{13})$$
+	\end{definition}
+
+\begin{lemma}
+	 If an edge in $\mathcal{G}$ is a decomposable edge, it can be removed from $\mathcal{G}$ without influence the feasibility of the entire task.
+\end{lemma}
+
+\begin{proof}
+	For an edge $\epsilon=(v_1,v_3)$ in NBA $\mathcal{G}$ satisfied the DE property, this means the task $\sigma=\zeta(\epsilon)$ can be divided into two subtasks $\sigma_1,\sigma_2$ and there exist a node $v_2$ that $\epsilon_1=(v_1,v_3)$,$\epsilon_2=(v_2,v_3)$ with the symbols $\sigma_1=\zeta(\epsilon_1)$, $\sigma_2=\zeta(\epsilon_2)$. For any TS that can provide an accepting \emph{word} $\rho=\cdots\varsigma\cdots$ in $\mathcal{G}$ and go through the edge $\epsilon$, it can execute a symbol $ \varsigma\models\sigma$ for edge $\epsilon$. Due to $\sigma=\sigma_1\land\sigma_2$, $\varsigma\models\sigma_1\land\sigma_2\Rightarrow\varsigma\models\sigma_1$,$\varsigma\models\sigma_2$.  The temporal ordered in LTL is \emph{time-abstract} and discrete which don't care about duration of each temporal-step. That means TS can provide a derivate \emph{word} $\rho'=\cdots\varsigma\varsigma\cdots$ by splitting the time step with symbols $\varsigma$. Facing the $\mathcal{G}'$ with $\epsilon$ been removed, the first $\varsigma\models\sigma_1$ and the second $\varsigma\models\sigma_2$. So the feasibility of $\mathcal{G}'$ will not be affected.
+\end{proof}
+
+Using DE property to remove all the decomposable edges in $\mathcal{G}$, we can get a pruned NBA $\mathcal{G}^{-}$ with only basics subtask which greatly reduce the complexity. It is worth mentioning that a decomposable edge can be devided into two decomposable edges and it also can be one sub-edge of another decomposable edge. That means before we find out all decomposable edges in $\mathcal{G}$, we should not prune anyone to avoid the situations that a sub-edge of decomposable edge is removed and this decomposable edge was regard as an undecomposable edge.
+What's more, the connectivity of $\mathcal{G}^-$ stays the same as that of $\mathcal{G}$. Because for any three nodes $v_1,v_2,v_3$, removing the decomposable edge will not change connectivity between them. Thus, we do not need to consider and dispose the nodes in $\mathcal{G}^-$ and just inherit the nodes set $\nu$ in $\mathcal{G}$.
+
+\subsection{Computing the temporal order of path}
+In this section, we take a discussion about the dependence relation of each symbol $\sigma$ and put forward an anytime algorithm in $\mathcal{G}^-$ to find the dependence relations from accepting path. For simplicity, we mainly discuss the prefix paths from initial states to the accepting states and the suffix paths can be solved by this algorithm with minor changes.
+
+The dependence relation is a concept between  two symbols $\sigma_1$ and $\sigma_2$,$\sigma_1\ne\sigma_2$ in $\mathcal{G}$ to describe whether they need to execute in a certain temporal order or just in a stochastic order.
+\begin{definition}[Global Dependence Relation]
+	Given a BA $\mathcal{B}=(Q,Q_0,\Sigma,\zeta,Q^{F})$ with $\alpha,\beta\in\Sigma$,$\alpha\ne\beta$. $\Sigma(q)$ is a symbols set that $\Sigma(q)=\{\sigma\in\Sigma|\exists{q'},\sigma=\zeta(q,q')\},\alpha=\zeta(q,\alpha(q))$ 
+	
+	1. $\alpha$ and $\beta$ are \emph{independent} (in $\mathcal{B}$) if for any $q\in Q$ with $\alpha,\beta\in\Sigma(q)$:
+	
+	$\beta\in\Sigma(\alpha(q))$ and  $\alpha\in\Sigma(\beta(q))$ and $\alpha(\beta(q))=\beta(\alpha(q))$.
+	
+	2. $\alpha$ and $\beta$ are \emph{dependent} (in $\mathcal{B}$) if $\alpha$ and $\beta$ are not \emph{independent} in $\mathcal{B}$.
+\end{definition}%principle of model checking 8 p
+
+A pair of independent symbols in a sequence can be carried out in any order without destroy \emph{accepting} character, which can reduce the order constraint during the executive process. However, the definition is strict and sufficient that the relation need satisfied in every state of $\mathcal{B}$ which can be relaxed.
+In the simplest case, given an accepting path $l=\cdots v_iv_{i+1}v_{i+2}\cdots$, $\alpha=\zeta(v_i,v_{i+1})$,$\beta=\zeta(v_{i+1},v_{i+2})$, $\alpha,\beta$ can be executed in any order without destroy the accepting character if $\alpha(\beta(v_i))=\beta(\alpha(vi))=v_{i+2}$. That means we don't need to check the \emph{dependence} relation in all states of $\mathcal{B}$. However, it may cause misunderstanding saying "$\alpha$ and $\beta$ are independent" when $S$ has multiple symbols equal to $\alpha$ or $\beta$. So before defining the local dependence relation, we fistly define the \emph{anchor function}.
+ For convenience, given a path $l=v_0v_1v_2\cdots$, we use $S=\sigma_1\sigma_2\sigma_3\cdots,\sigma_i=\zeta(v_i,v_{i+1})$ as the essential sequence of $l$ and we call the $S$ an \emph{accepting sequence} if $l$ is an accepting path.
+%begin{definition}[Local Dependence Relation]
+%	Given an accepting sequence $S=\sigma_1\sigma_2\sigma_3\cdots\sigma_n$, a token sequence $S'$ is that $S'(j)=S(j)$, for all $j\ne i,j\ne i+1$;
+%	 $S'(i)=S(i+1),S'(i+1)=S(i)$:
+%	 When $\sigma_{i}\ne\sigma_{i+1}$:
+%	1. $i_{th}$ symbols and $(i+1)_{th}$ symbols are \emph{independent}  ($\sigma_i||\sigma_{i+1}$) in $S$ if $S'$ is also an accepting sequence. \\
+%	2. $i_{th}$ symbols and $(i+1)_{th}$ symbols are \emph{dependent} in $S$ if $S'$ is no longer an accepting sequence. \\
+%	When $\sigma_{i}=\sigma_{i+1}$
+%	3. $i_{th}$ symbols and $(i+1)_{th}$ symbols are \emph{dependent} in $S$ if $\sigma_{i}=\sigma_{i+1}$.
+%\end{definition}
+
+\begin{definition}[Anchor function]
+   Given an accepting sequence $S=\sigma_1\sigma_2\sigma_3\cdots\sigma_n$, we defined an anchor function $\Omega:N\rightarrow\sigma$ to map the symbols from serial number as $\Omega(i)=\sigma_i$ and $\Omega([1:n])=S$. $S_\Omega=S$ is the anchor sequence of $\Omega$. 
+\end{definition}
+
+\begin{definition}[Local Dependence Relation]
+	Given an anchor function $\Omega(i)=\sigma_{i}$ of an accepting sequence S, $\mathcal{N}$ is a permutation of the natural numbers $[1:n]$ and $\Omega(\mathcal{N})$ is an accepting sequence. $i\in [1:n-1]$ and $\mathcal{N}'$ is a permutation with $\mathcal{N}'([1:i-1])=\mathcal{N}([1:i-1])$,$\mathcal{N}'([i+2:n])=\mathcal{N}([i+2:n])$, $\mathcal{N}'(i)=\mathcal{N}(i+1)$, $\mathcal{N}'(i+1)=\mathcal{N}(i)$. \\
+	If $\Omega(\mathcal{N}(i))\ne\Omega(\mathcal{N}(i+1))$: \\
+	1. $\mathcal{N}(i)$ and $\mathcal{N}(i+1)$ are \emph{independent} in $\mathcal{N}$ from $\Omega$ if $\Omega(\mathcal{N}')$ is also an accepting sequence. \\
+	2. $\mathcal{N}(i)$ and $\mathcal{N}(i+1)$ are \emph{dependent} in $\mathcal{N}$ from $\Omega$ if $\Omega(\mathcal{N}')$ is not an accepting sequence.\\
+	If $\Omega(\mathcal{N}(i))=\Omega(\mathcal{N}(i+1))$:\\
+	 $\mathcal{N}(i)$ and $\mathcal{N}(i+1)$ are \emph{dependent} in $\mathcal{N}$ from $\Omega$
+\end{definition}
+
+\begin{definition}[Partially ordered set]
+	A Partially ordered set is a tuple:
+	$$P=(\Omega,C_{parallel},C_{partial},\mathcal{S}_{accept})$$ 
+	where $\Omega$ is the \emph{anchor function}; $C_{parallel}$ is a set of natural Numbers pair $(i,j)$ which satisfied $\Omega(i)$ and $\Omega(j)$ are \emph{independent}; $C_{partial}$ is a set of natural Numbers pair $(i,j)$ which satisfied $\Omega(i)$ and $\Omega(j)$ are \emph{dependent}; $\mathcal{S}_{accept}$ is the arrangement of nature numbers set whose arrange satisfied the order of $S_{less-than}$. What's more, the anchor sequence $S_\Omega\in \mathcal{S}_{accept}$
+\end{definition}
+
+\begin{remark}
+    The chose of anchor function is insignificant, any sequence $S$ in $\mathcal{S}_{accept}$ can use as a new anchor sequence $S'_\Omega=S$ and generate a new anchor function $\Omega'$. And we can find another Partially ordered set $P'$ with same $S'_{accept}=S_{accept}$.
+\end{remark}
+   Under definition above, We can propose algorithm 1 to generate the partial order set of anchor sequence $S_\Omega$ in NBA $\mathcal{B}$.
+
+\begin{algorithm}
+\caption{P\_O\_S}
+\label{alg:1}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}  % Use Input in the format of Algorithm
+\renewcommand{\algorithmicensure}{\textbf{Output:}} % Use Output in the format of Algorithm
+\begin{algorithmic}[1]
+\Require The NBA $\mathcal{B}$, a feasible sequence $S$
+\Ensure  Partial order sets $P$
+\State Set the anchor function $\Omega$ with $S$
+\State $\mathcal{N}_{new}=\{[1:n]\}$\# n is the length of $S$
+\While{$\mathcal{N}_{new}\ne\Phi$}
+\State Fetch one sequence $\hat{N}$ from $\mathcal{N}_{new}$
+\State add $\Omega(\hat{N})$ to $\mathcal{S}_{accept}$
+\For{$i$ in $1:n-1$ }
+\State $\hat{N'}=\hat{N}$, $\hat{N'}(i)=\hat{N}(i+1)$, $\hat{N'}(i+1)=\hat{N}(i)$
+
+\If {$\Omega(\hat{N'})$ is accepting in $\mathcal{B}$ $\And$ $\Omega(\hat{N'}(i))\ne\Omega(\hat{N'}(i+1))$}
+
+\State add $(\hat{N'}(i),\hat{N}(i+1))$ to $C_{parallel}$
+\State add $ \hat{N'}$ to $\mathcal{N}_{new}$
+\Else{ add $(N'(i),N(i+1))$ to $C_{partial}$}
+\EndIf
+\EndFor
+\State remove $\hat{N}$ from $\mathcal{N}_{new}$ 
+\EndWhile
+\State Return $P=(\Omega,C_{parallel},C_{partial},\mathcal{S}_{accept})$
+\end{algorithmic}
+\end{algorithm}
+
+Due to the complexity of NBA $\mathcal{B}$, we propose an anytime \emph{algorithm.2}, which can quickly generate a not exact solutions and then after a couple of times gradually improve the quality of the solution, to get the Partial order sets $S$. This algorithm can be thought of as a generalization of Depth-first search. We can stop the for loop and check the sets of Partial order sets P.
+
+\begin{algorithm}
+	\caption{anytime algorithm}
+	\label{alg:2}
+	\renewcommand{\algorithmicrequire}{\textbf{Input:}}  % Use Input in the format of Algorithm
+	\renewcommand{\algorithmicensure}{\textbf{Output:}} % Use Output in the format of Algorithm
+	\begin{algorithmic}[1]
+		\Require The NBA $\mathcal{B}$
+		\Ensure  set of Partial order set $\mathcal{P}=\{P_i\}$
+		\For {$q_0$ in $Q_0$} \# prefix
+		\State $stack=[q_0]$,$S_{visit}=[]$,$10$
+		\While {$stack\ne \Phi$}
+		\State fetch the last one of $stack$ as $l_{s}$ and remove it
+		\State Find the successors of $l_{s}(-1)$ as $nodes$
+		\For {$node$ in $nodes$}
+		\If {$node$ not in $l_{s}$}
+		\State $\hat{l}_{s}=[l_{s},node]$,add $\hat{l}_{s}$ to $stack$
+		\If {$\hat{l}_{s}$ is accepting $\And$ $ \hat{l}_{s}\not\in S_{visit}$ }
+		\State $P=P\_O\_S(\mathcal{B},\hat{l}_{s})$,add $P$ to $\mathcal{P}$
+		\State add $\mathcal{S}_{accept}$ to $S_{visit}$
+		\EndIf
+		\EndIf
+		\EndFor
+		\EndWhile
+		\EndFor
+		\State Return $\mathcal{S}$
+	\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Task assignment}
+\subsection{Task Execute}
+
+
+\appendices
+\section{A.Trimming the NBA}
+Appendix one text goes here.
+
+
+\section{}
+Appendix two text goes here.
+
+
+% use section* for acknowledgment
+\section*{Acknowledgment}
+
+
+The authors would like to thank...
+
+
+\ifCLASSOPTIONcaptionsoff
+  \newpage
+\fi
+
+
+
+\begin{thebibliography}{1}
+
+\bibitem{IEEEhowto:kopka}
+H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+\end{thebibliography}
+
+
+
+\begin{IEEEbiography}{Michael Shell}
+Biography text here.
+\end{IEEEbiography}
+
+% if you will not have a photo at all:
+\begin{IEEEbiographynophoto}{John Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+
+\begin{IEEEbiographynophoto}{Jane Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+
+ \textbf{B. Find all feasible path}
+
+\begin{itemize}
+	\item[4)] 
+	Go to step 3 until the path list get null.
+\end{itemize}
+\begin{itemize}
+	\item[5)] 
+	Return the path list $L_p$.
+\end{itemize}
+\begin{lemma}
+	1234
+\end{lemma}
+
+
+
+% that's all folks
+\end{document}
+
+

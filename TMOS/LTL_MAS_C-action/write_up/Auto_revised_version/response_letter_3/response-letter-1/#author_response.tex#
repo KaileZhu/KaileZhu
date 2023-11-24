@@ -1,0 +1,1425 @@
+\documentclass[10pt]{article}
+\usepackage{siunitx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage[colorlinks,allcolors=black]{hyperref}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{amsthm}
+\usepackage{threeparttable}
+\usepackage[linesnumbered,boxed,ruled,commentsnumbered,noend]{algorithm2e}
+\usepackage{color}
+
+
+% GENERAL
+\usepackage{xcolor}
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+\newcommand{\improve}[1]{\textcolor{cyan}{IMPROVE:#1}}
+\newcommand{\note}[1]{\textcolor{blue}{NOTE: #1}}
+\newcommand{\respond}[1]{\textcolor{purple}{RESPOND: #1}}
+\newcommand{\question}[1]{\textcolor{orange}{Q: #1}}
+
+\usepackage{indentfirst}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\title{Authors Response for Submission ``Deadlock Resolution  and Feasibility Guarantee in MPC-based Multi-robot Trajectory Generation''}
+\author{Yuda Chen, Meng Guo, and Zhongkui Li}
+\date{}
+\maketitle
+
+
+
+\section*{To Associate Editor}
+
+
+\textbf{C:}
+\emph{
+	Your paper ``Deadlock Resolution and Feasibility Guarantee in MPC-based
+	Multi-robot Trajectory Generation", Number 22-1532, that you submitted
+	for possible publication in the IEEE Transactions on Automatic Control
+	has now been reviewed.	Copies of the reviews are enclosed.
+	Based on the reviews, it is our decision that the paper cannot be
+	accepted for publication in the Transactions in its present form.
+	Three reviewers state that the manuscript contains publishable material
+	but is not ready for publication. The reviewers provide a large list of
+	suggestions and clarification requests that need to be carefully
+	addressed, especially, to improve the mathematical accuracy and
+	soundness of the results. In particular, all of them indicate missing
+	definitions for some of the used symbols and possible inaccuracies or
+	even errors in technical derivations.
+}
+
+\textbf{A:}
+The authors are grateful to the Associate Editor for the positive comments and insightful suggestions.
+They help us greatly improve the submission and further strengthen its contributions.
+Concretely, we have mainly made the following three modifications:
+\begin{itemize}
+	\item Recommendations as suggested by reviewers are accepted, e.g., the table of nomenclatures is added as suggested by Reviewer 2; the fact that proposed buffer is velocity dependent is clarified as suggested by Reviewer~7; and some meaningful references as recommended by Reviewers~7 and 9 are added and compared in the related work.
+	
+	\item Numerous typos are resolved and corrected, e.g.,
+	the condition of deadlocks is clarified in the proof of Theorem~2 as suggested by Reviewer~7; typos in equations~(1), (9) and (30) are fixed as pointed out by Reviewers~2, 7 and 9.
+	
+	\item \todo{Check!! I added this item.} The conditions for potential deadlocks under the proposed scheme are revised, for which the associated analyses are improved significantly to address explicitly the singularities at deadlock states. Furthermore, the instability of potential deadlocks where two robots are collinear is formally proven in Lemma 3. These changes have clarified the technical questions as imposed by Reviewers 7 and 9. 
+\end{itemize}
+
+All these changes are highlighted in the revised paper.
+Detailed responses to each reviewer can be found in the sequel.
+$\hfill\blacksquare$
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+
+\newpage
+\section*{To Reviewer 2}
+
+\textbf{C:}
+\emph{This paper presents a systematic approach called infinite-horizon model
+	predictive control with deadlock resolution. The main contribution
+	according to the authors is to consider the complete planning
+	trajectory of all neighboring robots based on BVC and to introduce a
+	velocity-dependent buffer width. In addition, an extra warning band is
+	added to the terminal horizon to facilitate the resolution of potential
+	deadlocks. Based on these constraints and a new cost function for
+	handling potential deadlocks, the authors propose an improved
+	distributed MPC formulation and provide a formal analysis and proof of
+	the performance of the proposed algorithm in terms of deadlock
+	resolution, recursive feasibility, and local communication. My detailed
+	comments and suggestions are given below.
+}
+
+\textbf{A:}
+The authors would like to thank you for your time to review our paper and for the constructive comments. In the following, we will respond to your comments one by one in detail. In the revised manuscript, all corresponding changes have been highlighted in blue. 
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{Q:}
+\emph{
+	In Section V, "2) Narrow Passage", the authors add a penalty term to
+	the cost function to keep the other two robots away from the
+	intermediate robot. What exactly is the added penalty term?
+}
+
+\textbf{A:}
+Thank you for this comment.
+The penalty term is a part of objective function defined as
+\begin{equation*} 
+	C^i_w = \sum_{j \neq i} \rho^{ij} (\frac{w^{i j} }{\epsilon}-\ln w^{i j}),
+\end{equation*}
+where $\rho^{ij}$ is a parameter designed for the purpose of deadlock resolution, $\epsilon$ is the maximum warning band width and $w^{i j}$ is variable to be optimized in final convex optimization.
+It will be decreased when both robots on the side move away from their targets until they are not located within the warning band anymore at around $t=3.0$s as shown in Fig.~\ref{figure:2D_3}.
+More clarifications are given in the third paragraph of Section~V-A.
+$\hfill\blacksquare$
+
+
+\hspace*{\fill} \
+
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	Please check whether ref. [3] is in the correct format.
+}
+
+\textbf{A:}
+Thank you for this comment. We have fixed this typo.
+$\hfill\blacksquare$
+
+
+
+\hspace*{\fill} \
+
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.8\linewidth]{figs/2D_3_IMPC-DR}
+	\caption{ The proposed method enables the robots on the two sides to temporarily move away and leave space for the middle robot to pass through.}
+	\label{figure:2D_3}
+\end{figure}
+
+%===========================================================
+
+\textbf{Q:}
+\emph{
+	This paper considers the model of a double integrator.
+	I think the author needs to consider a more realistic model.
+}
+
+\textbf{A:}
+Thank you for this question.
+The model of a double-integrator is adopted in this paper mainly dues to the following four reasons:
+\begin{itemize}
+\item Many common robotic platforms can be described by the double-integrator model,
+  either directly or after linearization, e.g., omnidirectional UGVs, unicycles and quadrotors considered in the experiment.
+
+\item It is a common practice in related works to address the challenging problem of multi-robot navigation under this assumption, as in~[21],[23],[26],[29],[33],[36],[38], etc.
+
+\item Additional constraints on the velocity and acceleration are included, yielding a more practical model.
+
+\item The condition for deadlocks \todo{derived in Eq.(XXX)} can be understood in an intuitive way given the double-integrator model.
+\end{itemize}
+The further consideration of general nonlinear models remains part of our ongoing work.
+$\hfill\blacksquare$
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	The abbreviations that appear for the first time in the text should
+	be explained to facilitate the reader's understanding, such as Iscp,
+	DMPC, BVC, etc.
+}
+
+\textbf{A:}
+Thank you for this comment.
+We have further explained these names in revised paper.
+Namely,
+DMPC stands for distributed model predictive control;
+BVC for the buffered Voronoi cell;
+iSCP for incremental sequential convex programming.
+More clarifications are given in the first paragraph of Section V-B.
+$\hfill\blacksquare$
+
+
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	There are many formulas in the text, and the meaning of each math
+	symbol in the formula should be explained clearly, and the author can
+	show it in a table or other appropriate way.
+}
+
+\textbf{A:}
+Thanks for pointing out this.
+According to this constructive comment, we added a table as nomenclatures on the third Page.
+$\hfill\blacksquare$
+
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	In the "A. Typical Scenarios" section, what is the author's basis
+	for setting parameters such as maximum speed, maximum acceleration,
+	sampling time, and warning bandwidth? And the setting basis of related
+	parameters in "B. Random Transitions--2) High-Speed 3D Workspaces"
+	should be explained.
+}
+
+\textbf{A:}
+Thanks for this meaningful comment.
+The maximum speed, the sampling time and acceleration are set according to the actual model of quadrotors used in the hardware experiment, e.g, crazyswarm.
+The warning bandwidth is related to the radius of underlying agents. 
+Concretely, the maximum width of the warning band is generally chosen as $\epsilon\in (\frac{r_\text{min}}{6},\frac{r_\text{min}}{2})$, where $r_\text{min}$ is the diameter of a robot. 
+It can be also observed from the simulation results that a larger $\epsilon$ yields a better performance during deadlock resolution.
+However, it also leads to the requirement for a larger distance between the robot targets as stated in Theorem~2 that $\| p^i_\text{target} - p^j_\text{target} \| > r^\prime_\text{min}+2\epsilon$.
+Thus, $\frac{r_\text{min}}{6}<\epsilon<\frac{r_\text{min}}{2}$ is chosen as a proper interval based on practical experience.
+More clarifications are given in the first paragraph of Section V-A and the second paragraph of Section II-A.
+$\hfill\blacksquare$
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{Q:}
+\emph{
+In Part V, the numerical simulations are developed in typical
+scenarios. Have the authors ever tried to generalize to atypical
+scenarios, such as asymmetric scenarios?
+}
+
+\textbf{A:}
+Thanks for this question.
+Symmetric scenarios are addressed first as deadlocks are more likely to appear in such scenarios,
+as also pointed out in Ref.~[29].
+Thus, we have added in the second paragraph of Section V-A that the symmetric scenarios are simulated such that the initial and target positions of all robots are symmetric, which is the most common cause for deadlocks [30].
+Asymmetric cases are mainly considered in the scenario of ``random transitions'' in Section V-B,
+where hundreds of asymmetric scenarios are tested to compare performances with other state of the art methods.
+$\hfill\blacksquare$
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	Eq. (2) may contain a typo.
+}
+
+\textbf{A:}
+Thank you for pointing out this typo that $p^{ij} = \| p^i-p^j \| \ge r_{\text{min}}$ should be 
+$\| p^{ij} \|= \| p^i-p^j \| \ge r_{\text{min}}$.
+We have corrected this typo in equation~(1)
+$\hfill\blacksquare$
+
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	The downwash effect of UAVs is not considered
+}
+
+\textbf{A:}
+Thanks for this comment.
+The down wash effects of UAVs is actually considered in the hardware experiments by deforming the safety region around the robots.
+More specifically, a 3D ellipsoid instead of a ball is used as the robot size in 3D  with diameter $0.3$m in $xy$-axis and $0.7$m in $z$-axis.
+This safety constraint is incorporated in the formulation of MPC at each time step.
+Its influence on the robot motion can be seen the trajectories during hardware experiments shown 
+in Fig.~\ref{figure:8-cube} below and also in the experiment video at~\href{https://youtu.be/IDcXoEer068}{https://youtu.be/IDcXoEer068}.
+More clarifications are given in the third paragraph of Section V-C.
+
+$\hfill\blacksquare$
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.25\textwidth]{figs/8_cube_real-trajectory}
+	\caption{8 crazyfies in a cube fly to their antipodal positions.}
+	\label{figure:8-cube}
+\end{figure}
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	The symbols of the paper are too complex to read.
+}
+
+\textbf{A:}
+Thanks for this comment.
+To alleviate the problem of complex notations, 
+we have added a table as nomenclatures on the third page.
+$\hfill\blacksquare$
+
+
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	The results are meaningful but need some sensitivity analysis
+	to support them.
+}
+
+\textbf{A:}
+Thanks for this constructive and meaningful suggestion.
+We have added sensitivity analysis in simulations.
+To validate the robustness of our deadlock resolution scheme, artificial forces are applied to all robots as external disturbances, e.g., to mimic wind gust.
+The forces follow a uniform Gaussian distribution with mean zero and standard deviation~$\sigma$.
+As shown in Fig.~\ref{figure: 2D_4_sensitivity}, when~$\alpha=\sigma/a_\text{max}$ is changed from~$0$ to $0.2$ within the symmetric scenario,
+the proposed navigation and deadlock resolution scheme achieves the same level of deadlock resolution and similar completion time.
+\todo{Maybe you can explain a bit more? these trajectories are almost identical.}
+More clarifications are given in the Section V-A.
+$\hfill\blacksquare$
+
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\begin{figure}
+	\centering
+	\subfigure{
+		\includegraphics[width=0.9\linewidth]{figs/2D_4_sensitivity}
+	}
+	\caption{
+			Robot trajectories under different external disturbances within symmetric scenario.
+	}
+	\label{figure: 2D_4_sensitivity}
+\end{figure}
+
+%===========================================================
+
+\begin{algorithm}[t] \label{AL:IMPC-DR}
+	\caption{IMPC-DR}
+	\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+	
+	\Input{$p^i(t_0)$, $p^i_\text{target}$}
+	$b^i_\text{TO} \leftarrow  \textbf{False}$\;
+	$\overline{\mathcal{P}}^i(t_0) \leftarrow \text{InitialPT}(p^i(t_0))$  \label{algline:intial}\;
+	\While{not all robots at target}
+	{
+		\For{ $i\in \mathcal{N}$ concurrently }{
+			$\overline{\mathcal{P}}^j (t) \leftarrow \text{Communicate}(\overline{\mathcal{P}}^i(t))$\ \label{algline:communication}\;
+			$cons^i \leftarrow \text{MBVC-WB}(\overline{\mathcal{P}}^i(t), \overline{\mathcal{P}}^j (t))$ \label{algline:get-constraint}\;
+			$\rho^{ij} \leftarrow \text{DeadlockResolve}()$ \label{algline:deadlock-resolution}\;
+			$\mathcal{P}^i(t) \leftarrow \text{Optimization}(cons^i,\rho^{ij})$ \label{algline:convex-programming}\;
+			$b^i_\text{TO} \leftarrow \text{DeadlockDetction}( \mathcal{P}^i(t))$ \label{algline:get-boolean}\;
+			$\overline{\mathcal{P}}^i(t+h) \leftarrow \text{GetPT}( \mathcal{P}^i(t) )$\;
+			$\text{ExecuteTrajectory}(\mathcal{P}^i(t))$ \label{algline:execute-trajectory}\;
+		}
+		$t \leftarrow t+h$\;
+	}
+\end{algorithm}
+
+\textbf{C:}
+\emph{
+	The real-time performance of the algorithm is also an important
+	indicator. The author is required to provide a quantitative comparison
+	of each step computation time of each algorithm.
+}
+
+\textbf{A:}
+Thank you for this insightful comment.
+As a NP-hard problem \todo{where did you get this? }, in Algorithm~1, the final convex programming (Line~\ref{algline:convex-programming}) with $(K+1)\cdot N + K\cdot d$ constraints and~$(K\cdot d + N)$ real variables takes up the dominate computation cost.
+Concretely, this optimization takes approximated $10.0$ms which is approximately equal to the whole time. 
+In the meantime, the execution of trajectory (Line~\ref{algline:execute-trajectory}) is achieved via sending it to a lower-level CPU which does not take computation time.
+Moreover, the communication (Line~\ref{algline:communication}), derivation of MBVC-WB (Line~\ref{algline:get-constraint}), deadlock detection (Line~\ref{algline:get-boolean}) and resolution (Line~\ref{algline:deadlock-resolution}) take $<0.1$ms, $<0.01$ms, $<0.01$ms, $<0.01$ms respectively.
+Clarifications can be found in the second paragraph of Section III-E.
+$\hfill\blacksquare$
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	The algorithms compared do not seem to be the SOTA.
+	Some were proposed in 2015 and 2017. Please see such recent studies as:
+	A Survey of Underwater Multi-Robot Systems;
+	Toward Coordination Control of Multiple Fish-Like Robots:
+	Real-Time Vision-Based Pose Estimation and Tracking via Deep Neural Networks;
+	Collision and Deadlock Avoidance in Multi-Robot Systems Based on Glued Nodes;
+	and Optimal scheduling and non-cooperative distributed model predictive control for multiple robotic manipulators.
+}
+
+\textbf{A:}
+Thank you for these meaningful references all of which has been cited in revised paper as Reference~[2],[3],[4],[32].
+In particular, the work in [32] is highly related to this work.
+It performs well in deadlock resolution via proper scheduling and prioritization.
+Nonetheless, it is dedicated to a structured environment where a discrete grid map is considered and the dynamic model is neglected.
+By contrast, the proposed work is adopted for an unstructured environment and a double-integrator model with velocity and input constraint.
+More detailed comparisons with these works are added in Section~I, Page~1.
+The work in [2] is meaningful survey about underwater multi-agent systems where the cooperative motion planning is mentioned.
+Meanwhile, Ref.~[3] investigates the pose estimation of multiple robots which is utilized for motion planning.
+Furthermore, in Ref.~[4], distributed model predictive control is adopted for the motion planning of multiple robotic manipulators.
+More details can be found at Section~I, Page~1.
+\textcolor{green}{Actually speaking, these works cannot make comparison with ours as they are different fields. Thus, numerical simulation is unnecessary.}
+$\hfill\blacksquare$
+
+
+
+
+\newpage
+\section*{To Reviewer 7}
+
+\textbf{C:}
+\emph{
+	This paper proposes a distributed algorithm for generating
+	collision-free trajectories for a multi-robot system that stabilize the
+	robots to their goals. The algorithm  builds on top of the BVC
+	algorithm [31], but improves it by making sure that the robots do not
+	fall in deadlock and the MPC problem remains recursively feasible. The
+	cost function and constraints are modified to ensure that when
+	deadlocks are detected, some parameters can be adapted online to add
+	repulsion so that the robots get out of deadlock. The authors present
+	several simulation and experimental results. While the writing of this
+	paper is mostly clear, there are many mathematical errors made in the
+	equations and undefined symbols in some equations.
+	It is likely that the analysis will change after incorporating what I feel are terms that were missed out in some places.
+	Additionally, there are statements that
+	are written out as claims without substantiating them with proofs.
+	Overall this paper seems to build upon reference [31] and the results derived are similar to reference [34] with the difference that their resolution scheme is
+	applicable to N robots (not just 3 like in [34]), the force balance condition for deadlock is explicitly used in resolution and the experiments are very comprehensive.
+}
+
+
+
+\textbf{A:}
+The authors would like to thank the reviewer for these constructive comments.
+In the following, we will respond to your comments one by one in detail. 
+In the revised manuscript, all corresponding changes have been highlighted in blue.
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{Q:}
+\emph{
+	What is the benefit of making the MPC an infinite horizon? It is not
+	clear as to why having the terminal constraint requiring the robots to
+	to be static allows the horizon to be infinite length?	Moreover, can
+	you highlight specifically, why having $v_K=0$ helps in recursive
+	feasibility?
+}
+
+\textbf{A:}
+Thanks for this insightful question.
+
+In proposed method, we do not set $K \rightarrow \infty$ and just regard horizon to be infinite.
+Intuitively, it is similar to the ``braking'' mechanism adopted in [45] which is widely utilized for safety guarantee.
+It is particularly useful for the proposed framework as: 
+\begin{itemize}
+	\item It ensures that the planned trajectory is remained to be collision-free beyond horizon $K$ such that, as the horizon recedes, a feasible trajectory is already prepared.
+	
+	\item It restricts the state of terminal horizon and thus avoids an over-aggressive state.
+\end{itemize}
+Consequently, the proposed method has the theoretical guarantee of safety which is shown in Theorem~3 and Corollary~1.
+
+Regrading the second comment, we have restated in Remark~3 that under the terminal constraint the planning horizon~$K$ can be extended to {infinity} as the planned state $x^i_k$ is identical to $x^i_K$ if $u^i_{k-1} = u_e$ where $X^i_K= \textbf{A} X^i_K + \textbf{B} u_e$ for $k > K$.
+
+Lastly, it is worth noting that $v^i_K=0$ is equivalent to the terminal constraint that
+\begin{equation*} 
+	x_{K}^{i} \in X_{e},\; \text{where}\; X_{e}=\{x \mid x = \textbf{A} x + \textbf{B} u, u \in \mathbf{U} \}
+\end{equation*}
+for a double-integrator.
+In proof of Theorem~3,  $v^i_K=0$ implies that  $x^i_{K}(t)=x^i_{K+1}(t-~h~)=x^i_{K}(t-~h~)$ and $u^i_{K-1}(t)=u^i_K(t-h)=u_e$
+satisfy not only the terminal constraint
+$v^i_K(t)=0$, 
+velocity constraint~$\| \Theta_v v_k^i(t) \| \le v_{\text{max}}$ and 
+input constraint~$\| \Theta_a u^i_{k-1}(t) \| \le a_{\text{max}}$ but also the collision avoidance constraint $a_{K}^{i j^\mathrm{T}} p_{K}^{i}(t) \geq b_{K}^{i j} + w^{i j}$.
+This ensures that the formulated optimization is feasible in a recursive way such that the safety is guaranteed.
+$\hfill\blacksquare$
+
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	In the definition of discrete B under equation (3e), there should be an
+	$h$ multiplying $I_d$.
+}
+
+\textbf{A:}
+Thank you for your comment that pointing out this typo.
+It has been fixed in revision.
+$\hfill\blacksquare$
+
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	You should explicitly say that making the buffer width velocity
+	dependent is what helps you in ensuring that collision avoidance is
+	ensured between discrete sampling points.
+}
+
+\textbf{A:}
+Thanks for this meaningful suggestion.
+We have revised this statement in Remark~2 as follows:
+``\emph{
+the buffer width~$r_{\min }^{\prime}$ in~(4) is velocity
+dependent to ensure collision avoidance between sampling points
+}".
+$\hfill\blacksquare$
+
+
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	In the proof of theorem 2, you invoke Lemma 1, but Lemma 1 is about
+	collision avoidance and has nothing to do with theorem 2.
+}
+
+\textbf{A:}
+Thank you for pointing out this mistake.
+It should be Theorem~1 where the deadlock condition is analyzed and it is utilized for the proof of deadlock resolution in Theorem~2.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	The paper ``The before, during, and after of multi-robot deadlock"
+	indeed shows force equilibrium with N robots. It might be a good
+	reference to cite because some of your results do match with theirs.
+}
+
+
+\textbf{A:}
+Thanks for providing such a great reference.
+It has been added to the references as~[38].
+More specifically, the mentioned work provides analyses based on KKT conditions which utilizes a control barrier function method.
+In contrast, the analyses in our work are built upon a multi-horizon MPC with additional warning band.
+As a result, when deadlock happens, the robots are not at the brink of collision like this reference. 
+\textcolor{green}{``at the brink of collision" can be found at the abstract of this reference.}
+Last but not least, our work provides general results regarding multiple robots while only three of less robots can be considered in the reference.
+More clarifications can be found in the third paragraph of Section~I and in Remark~5 and~8.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	When you talk about symmetric scenarios, there is a paper ``Why does
+	symmetry cause deadlocks?" which conducts analysis for these scenarios.
+	You may consider citing this reference since it is closely related to
+	the point you mentioned.
+}
+
+
+\textbf{A:}
+Thanks again for providing this important reference.
+It has been added to the references as~[29] which investigates the reason of deadlock.
+It is emphasized in Section I that symmetric scenarios are more likely to induce deadlocks as also stated in~[29].
+Moreover, in the second paragraph of Section V-A, we explain why the symmetric scenarios are tested first in simulation.
+More clarifications can be found in Section I, Page~1 and Section V-A, Page~10. 
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	It looks like problem 1, equations (3a)-(3e), are already in a
+	distributed form because the variables you are searching for $u^i$ and
+	$x^i$. So what is not clear why you began section 2d with the sentence
+	``The main objective of this paper is to solve the above
+	problem in a distributed manner without a central coordinator".
+	You should explicitly state why problem 1, in the form stated as is, is not
+	distributed because it may require positions $p^j$ of other agents (or
+	whatever the true reason is).
+}
+
+\textbf{A:}
+Thanks for this insightful comment.
+Even through the variables to be optimized are~$u^i$ in optimization~(2)
+it cannot be solved by robot~$i$ alone as the constraints 
+${\| p^i_k-p^j_k  \|} \ge r_{\text{min}}, \;\forall j \ne i, \; k\in \mathcal{K} $ 
+depends on the future states of neighboring robots.
+Owing to this comment, we have emphasized at the beginning of Section II-D that
+the optimization in~(2) cannot be solved by robot~$i$ alone as the constraint
+${\| p^i_k-p^j_k  \|} \ge r_{\text{min}}, \;\forall j \ne i, \; k\in \mathcal{K}$
+depends on the state of robot~$j$.
+Instead of a central coordinator with all information, a \emph{distributed} solution is desired in this work.
+More clarifications can be found in Section~II-D, Page~3.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	What are the A and B in (10)? Why are they written in a different font?
+	If they are discrete time?
+}
+
+\textbf{A:}
+Thanks for this constructive comment.
+We have instead directly defined the dynamic system in the sampled format as
+\begin{equation*}
+	\mathbf{A}
+	=
+	\left[
+	\begin{smallmatrix}
+		\mathbf{I}_d & h \mathbf{I}_d  \\
+		\mathbf{0}_d & \mathbf{I}_d \\
+	\end{smallmatrix}
+	\right] ,\,\mathbf{B}=
+	\left[ \begin{smallmatrix}
+		\mathbf{0}_d   \\
+		h \mathbf{I}_d
+	\end{smallmatrix}
+	\right].
+\end{equation*}
+The notations $\mathcal{A}$, $\mathcal{B}$ in continuous manner are not used any more.
+Detailed changes can be found in the first paragraph of Section II-A.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{Q:}
+\emph{
+	If you adapt the $\rho$, then for the second case where robot j is on the
+	right side of robot i, both robots may come closer. So how will you
+	guarantee that safety margins will be maintained? What is ensuring that
+	changing $\rho$ as a function of time guarantees safety.
+}
+
+
+\textbf{A:}
+Thanks for this meaningful question.
+The change of $\rho^{ij}$ does not affect the safety guarantee directly.
+Specifically,
+the constraints $a_{K}^{i j^\mathrm{T}} p_{K}^{i} \geq b_{K}^{i j} + w^{i j}$ and $w^{ij} \geq 0$ which can be found in optimization~(2)
+directly enforce the following relation:
+\begin{equation*} 
+	a_{K}^{i j^\mathrm{T}} p_{K}^{i} \geq b_{K}^{i j}.
+\end{equation*}
+Note that the above inequality holds for any solution of optimization~(2) no matter the change of $\rho^{ij}$.
+Moreover, this inequality ensure that $p^i_k \in \mathcal{V}^{ij}_K$ where $\mathcal{V}^{ij}_K$ is the modified buffered Voronoi cell (MBVC) at horizon $K$.
+According to Lemma~1, i.e., the property of MBVC, the safety is ensured.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	Additionally, it is not clear why $w^{ij}=0$ will hold. Where did that come from? But why will it become 0 at any time?
+}
+
+\textbf{A:}
+Thanks for this critical comment.
+It should be $w^{ij}=\epsilon$, where $\epsilon$ is the width of the warning band. 
+We have fixed this typo.
+When $w^{ij}=\epsilon$ holds, it is evident that $p^i_K$ must be outside the warning band and thus $j \notin \mathcal{N}^i$.
+This further indicates that robot $i$ is not affected by robot $j$ after $\eta^i$ returns to its initial value.
+All above is explained at Page~7.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	In equation 23, what is the set $A^i$. It is undefined.
+}
+
+\textbf{A:}
+Thanks for this comment.
+It should be $\mathcal{N}^i$ instead where $ \mathcal{N}^i = \left\{ j \, | \, w^{i j} < \epsilon \right\}$ is defined at Theorem~1.
+This has been fixed in the revision.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	Also, how did you derive equation (23)? Moreover, why do you say ``summed attractive
+	forces in the xy plane".
+	If the x axis is aligned towards the goal,
+	then there should be attraction only to the one goal not to any other
+	point.
+	This puts into question the proof of theorem 2.
+}
+
+\textbf{A:}
+Thanks for this comment.
+To clarify the process of projection,
+it is re-stated as the projection of summed forces onto the $y$-axis.
+\textcolor{blue}{In particular, as your comment, we find that the attractive force in $y$-axis is zero.}
+\textcolor{green}{This word is critical.}
+More specifically, the summed forces acting on robot~$i$ in~$y$-direction is given by
+\begin{equation*} 
+F^i_y= \sum_{j\in \mathcal{N}^i} (-\sin \theta^{i j})  \rho_{0} e^{\left( \eta^i(t) \sin \theta^{i j}\right)} \delta^{i j} = 0.
+\end{equation*}
+Equation~(24), i.e., equation~(23) in previous revision, is derived under the observation that if a deadlock state persists, the deadlock conditions in Theorem~1 also hold at the previous time $t-h$.
+Consequently, $\theta^{ij}$ and $\delta^{ij}$ remain the same since $p^i_K$ and $w^{ij}$ do not change.
+Thus, equation~(24) follows that
+\begin{equation*} \label{F^i_{A,xy}}
+	\sum_{j\in \mathcal{N}^i} (-\sin \theta^{i j})   \rho_{0}  e^{\left( \eta^i(t-h) \sin \theta^{i j}\right)} \delta^{i j} = 0.
+\end{equation*}
+Compared with 
+\begin{equation*} 
+	F^i_y= \sum_{j\in \mathcal{N}^i} (-\sin \theta^{i j})  \rho_{0} e^{\left( \eta^i(t) \sin \theta^{i j}\right)} \delta^{i j} = 0,
+\end{equation*}
+it indicates that $\eta^i(t)$ is just replace by $\eta^i(t-h)$. 
+These arguments have been added to the Page~8.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	You claim in Remark 7, that you avoid livelock, but you don't prove it.
+	Please state this as a theorem and prove it mathematically.
+}
+
+\textbf{A:}
+Thanks for this insightful comment.
+We acknowledge that livelocks cannot be excluded theoretically in this work and remain parts of our future work.
+Thus, we have removed this claim in the revision.
+Nonetheless, extensive numerical simulations and hardware experiments in Section V-B have demonstrated a 100\% success rate without any livelock among one thousand tests.
+In contrast, other methods such as detour points have a much higher occurrence of both deadlocks and livelocks.
+Detailed comparisons can be found in Page~11.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	In the expression for the Lagrangian, in the proof of theorem 1, you
+	missed out the terms corresponding to $w^{ij} >0$. It is important that
+	$w^{ij} >0$ for your cost $C^i_w$ in (12) to be well defined. This missing
+	term will change your analysis quite a lot because you rely on the
+	gradient of the Lagrangian relative to $w^{ij}$ in (15d) and use that to
+	state your force equilibrium conclusion.
+}
+
+\textbf{A:}
+Thank you for this critical comment.
+We have clarified the reason why the constraint associated with~$w^{ij} >0$ is not considered in the Lagrangian of optimization~(2) as follows:
+\begin{itemize}
+	\item Since $\lim_{w^{ij} \rightarrow 0^+} C^i_w = +\infty$ and $C^i_w$ is only convex when $w^{ij} > 0$, the domain of $w^{ij}$ in $C^i$ is $w^{ij}>0$.
+	
+	\item Via the interior point method [44], $C^i_w$ itself is a barrier function associated with the constraints $w^{ij} >0$ such that the constraint have been enforced. 
+\end{itemize}
+Therefore, the constraints $w^{ij} \geq 0$ can be neglected.
+Detailed explanation can be found in Page~5.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	In (15) and the equation above (17), the delta symbol is missing under
+ 	$\partial C^i$.
+}
+
+\textbf{A:}
+Thanks for pointing this out.
+It has been fixed in the revision.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	In (17), the small k should be uppercase K.
+}
+
+\textbf{A:}
+Thanks for pointing this out.
+It has been fixed in the revision.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	Also, you say that you are substituting (11) in (15d), but really you
+	are substituting (12).
+}
+
+\textbf{A:}
+Thanks for this comment.
+We have confirmed that it is $C^i = C^i_w + C^i_p$ (equation~(11) in previous revision) that is substituted in 
+$\frac{\partial \mathcal{L}^{i}}{\partial w^{i j}}=\frac{\partial C^{i}}{\partial w^{i j}}+\lambda_{K}^{i j} + {}^w \lambda^{i j}=0$ (equation~(15d) in previous revision) as equation~(11) defines $C^i$ while 
+$C^i_w = \sum_{j \neq i} \rho^{ij} (\frac{w^{i j} }{\epsilon}-\ln w^{i j})$ (equation~(12) in previous revision) only reflects $C^i_w$. 
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	Your analysis about how you arrived at (18) is not clear, even if I
+	turn a blind eye to the mistake in the expression for the Lagrange
+	multiplier.
+}
+
+\textbf{A:}
+Thanks for this comment.
+It has been clarified further regarding how ${}^w \lambda^{i j} = 0$, i.e., equation~(18) in previous revision, is derived. 
+The proof is based on the contradiction that, assuming there exists $j \ne i$, ${}^w \lambda^{i j} > 0$, it can be shown that~${}^w \lambda^{i j} = 0$ holds. 
+More specifically, if there exists $j \ne i$ such that ${}^w \lambda^{i j} > 0$ holds,
+$w^{i j}=\epsilon$ holds due to the complementary slackness.
+Thus, 
+\begin{equation*} 
+	\rho^{ij} (-\frac{1}{w^{i j}} + \frac{1}{\epsilon})+\lambda_{K}^{i j} + {}^w \lambda^{i j} =0.
+\end{equation*}
+implies~$\lambda_{K}^{i j} + {}^w \lambda^{i j} =0$.
+However, the KKT condition requires that
+both ${}^w \lambda^{i j} \ge 0$ and  $\lambda_{K}^{i j} \ge 0$ must hold and in turn 
+${}^w \lambda^{i j} = 0$.
+Detailed modifications can be found in the proof of Theorem~2, Page~8.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	You say that $\sin(\theta^{ij})  (1 - e^{(\delta \eta \sin(\theta^{ij}))})<0$ for
+	$\theta^{ij} \in (-\pi,\pi]$. This is wrong. Check this for $\theta^{ij} = 0, \pi$.
+}
+
+\textbf{A:}
+Thank you very much for this meticulous review.
+The equality $\sin(\theta^{ij})  (1 - e^{(\delta \eta \sin(\theta^{ij}))})=0$ indeed exists when
+$\theta^{ij} = 0, \pi$ holds for $\forall j \ne i$.
+This indicates that the singularity of $\theta^{ij}$ may induces potential deadlocks.
+Fortunately, we find that the deadlocks caused by this singularity are unstable and can be easily avoided.
+Both Theorem 2 and Lemma 3 are revised accordingly to take into account this singularity formally.
+More specifically, the following changes have been made in the revision:
+
+\begin{itemize}
+	\item Two explicit conditions have been added in Theorem~2 to exclude stable deadlocks. Namely, 
+	assuming that (i) $\| p^i_\text{target} - p^j_\text{target} \| > r^\prime_\text{min}+2\epsilon$
+	holds for $\forall i \ne j$;
+	and (ii) projections of the targets of three or more robots onto the horizontal plane are not collinear, holds, 
+	no stable deadlocks exist.
+	Notably, these conditions are not restrictive and can be easily fulfilled by slightly adjusting the target positions, as explained also in Remark 7.
+
+	\item Regarding the case of two robots, we find that it has three possible patterns which are shown in Fig.~\ref{figure:2_deadlock}.
+	  Consider the first pattern shown in Fig.~\ref{figure:2_deadlock} (a).
+          Lemma~3 in the appendix shows that it is unstable and any small deviation can drive both robots to leave the deadlock.
+          The other two patterns are proven to be invalid due to the condition of deadlocks.
+	Detailed explanations can be found in the proof of Theorem~2.
+	
+      \item The fact that the pattern shown in Fig.~\ref{figure:2_deadlock}~(a) is unstable is proven formally in Lemma~3.
+	More specifically, we utilize the definition from [50] that there exists a closed bound $\mathcal{B}^R$ around the deadlock state,
+	such that an initial state can be found in an arbitrarily-small closed bound $\mathcal{B}^r\subset \mathcal{B}^R$ from which the system can leave $\mathcal{B}^R$.
+	Thus, two bounds denoted as $\mathcal{B}^i_d(r_d)$ as shown in Fig.~\ref{figure:unstable_deadlock-2} are derived for robot $i=1,2$, respectively. 
+	Within this bound, both robots $1$ and $2$ have the tendency to move along the direction of $\tau$ as shown in Fig.~\ref{figure:unstable_deadlock-1}.
+        It leads to the a monotonic increase of $\beta$ as illustrated in Fig.~\ref{figure:unstable_deadlock-2}.
+	Consequently, for an arbitrarily small $\beta$, $p^1_k$ or $p^2_K$ must leave the aforementioned bound in finite time which fulfills the definition of instability from [50].
+	The detailed proof of instability is provided in Lemma~3 of Appendix~B.
+\end{itemize}
+
+To sum up, Theorem 2 has been revised completely to exclude the singularity around $\theta^{ij}=0,\pi$. Two explicit conditions have been stated on the target positions of all robots such that all possible deadlocks are provably unstable.
+Detailed changes can be found in Theorem 2 on Page 8 and Lemma~3 of Appendix~B.
+$\hfill\blacksquare$
+
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figs/2_deadlock}
+	\caption{
+		Illustration of three possible cases when two robots form an unstable deadlock.
+	}
+	\label{figure:2_deadlock}
+\end{figure}
+
+\begin{figure}[t]
+	\centering
+	\subfigure[Robot $1$ has the motion tendency that along the $\tau$.]{
+		\includegraphics[width=0.6\linewidth]{figs/unstable_deadlock_1}
+		\label{figure:unstable_deadlock-1}
+	}
+	\quad
+	\subfigure[The angle $\beta(t)$ has the tendency to be increased such that $p^1_K$ or $p^2_K$ cannot be bounded.]{
+		\includegraphics[width=0.6\linewidth]{figs/unstable_deadlock_2}
+		\label{figure:unstable_deadlock-2}
+	}
+	\caption{The deadlock shown in Fig.~\ref{figure:2_deadlock}(a) is unstable.}
+\end{figure}
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	In the proof of theorem 2, it is not clear why $w^{ij} = 0$ comes into play
+	and how. This is coming from my earlier confusion in (21).
+}
+
+\textbf{A:}
+Thanks for this critical comment.
+It should be $w^{ij}=\epsilon$, where $\epsilon$ is the width of the warning band. We have fixed this typo.
+When $w^{ij}=\epsilon$ holds, it is evident that $p^i_K$ must be outside the warning band and thus $j \notin \mathcal{N}^i$.
+This further indicates that robot $i$ is not affected by robot $j$ after $\eta^i$ returns to its initial value.
+All above is explained at Page~7.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	Equation (29) and equation (28) missing a negative sign.
+}
+
+\textbf{A:}
+Thank you for pointing them out.
+They have been fixed in the revision.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+
+\newpage
+\section*{To Reviewer 9}
+
+
+\textbf{C:}
+\emph{
+	The paper addresses the challenging and interesting problem of
+	detecting and resolving deadlocks in multi-robot systems modeled via
+	double integrators. The authors propose an approach based on model
+	predictive control in order to account for the future trajectories of
+	the robots, and cast an optimization problem that aims to tune a
+	specific parameter that is in turn shaping the repulsive forces to take
+	the robot out of the imminent deadlock. The proposed method is a
+	variation of Voronoi Cells, where the collisions are avoided by each
+	agent remaining in their respective cells, modified in that there is a
+	"warning zone" added as a buffer zone to be used as the terminal cost
+	in the mpc.
+}
+
+\emph{
+	The approach considers the attractive and repulsive effects of the
+	target and other robots, respectively, and aims to tune the repulsive
+	forces by adjusting a parameter $\rho^{ij}$ using geometric arguments
+	similar to those that appear in existing approaches ("heuristics") but
+	with accompanying this with some theoretical analysis on recursive
+	feasibility. Overall this reviewer thinks that the paper addresses a
+	very challenging problem and makes a good contribution, which is
+	accompanied with simulation and experimental results. However, the
+	overall presentation has to be improved in several places to strengthen
+	the paper, before the paper can be accepted.
+}
+
+\textbf{A:}
+The authors would like to thank the reviewer for the constructive comments. In the following, we respond to these comments in detail. In the revised manuscript, all corresponding changes have been highlighted in blue.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+
+\textbf{C:}
+\emph{
+	How are the variables $w^{ij}$ and epsilon computed or chosen?
+}
+
+\textbf{A:} Thanks for this meaningful comment.
+
+The variable $w^{ij}$, introduced by warning band, is a variable to be optimized in the trajectory planning optimization~(2).
+Via bringing in a cost function related to variable $w^{ij}$, the repulsive force from $j$ to $i$ can be actively adjusted instead of passively determined which can be shown in Remark~4.
+
+On the other side, the choice of~$\epsilon$ can be arbitrary as long as~$\epsilon>0$.
+However, effectiveness of the proposed deadlock resolution scheme is closely related to~$\epsilon$.
+In general, a larger $\epsilon$ usually results in a better deadlock resolution, \textcolor{green}{a larger $\epsilon$ does not mean an earlier deadlock resolution.}
+but it also requires a larger distance between the targets of all robots, as the precondition in Theorem~2 states that $\| p^i_\text{target} - p^j_\text{target} \| > r^\prime_\text{min}+2\epsilon$.
+Thus, it is set to $\epsilon\in (\frac{r_\text{min}}{6},\frac{r_\text{min}}{2})$ in our numerical examples.
+Detailed modifications can be found in the second paragraph of Section III-A, Page~3.
+\todo{Change according to the second last comment to Reviewer 9, and the comment on Page 10 regarding $\omega_{ij}$.}
+\textcolor{green}{The comment about $w^{ij}$ is not proper here since it is only about a constraint relevant to $w^{ij}$.}
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{Q:}
+\emph{
+	Derivation of eq. (10) is unclear; why does the terminal set seems
+	to include only velocities and not positions? Shouldn't the position
+	affect the feasibility and deadlock resolution? Also it seems that
+	there is a typo, it should be $\dot{x} = Ax + Bu$?
+}
+
+\textbf{A:}
+Thanks for this insightful question.
+It is correct that the feasibility is directly related to its position.
+Therefore, the terminal constraint is defined as 
+\begin{equation*} 
+	x_{K}^{i} \in X_{e},\; \text{where}\; X_{e}=\{x \mid x = \textbf{A} x + \textbf{B} u, u \in \mathbf{U} \},
+\end{equation*}
+i.e.,~$X_{e}$ is a set of invariant states where feasible inputs exist for the system to remain in these states.
+For the considered model of a double-integrator, it is equivalent to the condition~$v^i_K=\mathbf{0}_d$.
+Regarding the system dynamics, we have adopted directly the model of sampled systems~$(\textbf{A},\textbf{B})$ where 
+\begin{equation*}
+	\mathbf{A}
+	=
+	\left[
+	\begin{smallmatrix}
+		\mathbf{I}_d & h \mathbf{I}_d  \\
+		\mathbf{0}_d & \mathbf{I}_d \\
+	\end{smallmatrix}
+	\right] ,\,\mathbf{B}=
+	\left[ \begin{smallmatrix}
+		\mathbf{0}_d   \\
+		h \mathbf{I}_d
+	\end{smallmatrix}
+	\right]
+\end{equation*}
+to avoid further confusions. 
+Detailed modification can be found at first paragraph of Section III-B.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	How is the planning horizon K chosen? The Remark 3 mentions it can
+	be extended to infinity; does this imply that safety and feasibility
+	guarantees hold only in the limit as K tends to infinity?
+}
+
+\textbf{A:}
+Thanks for this insightful comment.
+
+The choice of $K$ is indeed a key parameter for our method.
+In general, a larger $K$ indicates a better planning performance but also a longer computation time.
+In our numerical studies, it is chosen by $K > \frac{v_\text{max}}{a_\text{max}h}$ such that
+each robot can reduce its velocity from maximum to zero within the horizon.
+Detailed clarifications can be found in the first paragraph of Section III-C. 
+
+Moreover, it is worth noting that $K$ does not need to be infinity.
+Concretely, once the constraint 
+\begin{equation*} 
+	x_{K}^{i} \in X_{e},\; \text{where}\; X_{e}=\{x \mid x = \textbf{A} x + \textbf{B} u, u \in \mathbf{U} \},
+\end{equation*}  
+is enforced,
+the planning horizon~$K$ can be extended to \emph{infinity} as the planned state $x^i_k$ is identical to $x^i_K$ if $u^i_{k-1}=u_e$ satisfies~$X^i_{k+1}= \textbf{A} X^i_k + \textbf{B} u_e$ for $k > K$.
+Thus it is also called Infinite-horizon MPC (IMPC).
+Notably, the terminal constraint ensures that the planned trajectories remain collision-free beyond the horizon $K$.
+Detailed explanations have been added to Remark~3, Page~5.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{Q:}
+\emph{
+	Can you elaborate a bit more on the choice of cost (12)?
+}
+
+
+\textbf{A:}
+Thanks for this comment.
+The part of cost function in~(11) related to the warning band is given by
+\begin{equation*} 
+	C^i_w = \sum_{j \neq i} \rho^{ij} (\frac{w^{i j} }{\epsilon}-\ln w^{i j}),
+\end{equation*}
+where $w^{ij}$ is a variable to be optimized and $\rho^{ij}$ is a design parameter.
+It is worth noting that $C^i_w$ has two critical properties that $\lim_{w^{ij} \rightarrow 0^+} C^i_w = +\infty$ and $\frac{\partial C^i_w}{\partial w^{ij}}|_{w^{ij}=\epsilon}=0$.
+These properties play an important role in the proof of feasibility in Theorem~1 as:
+\begin{itemize}
+	\item It leads to the omission of constraints $w^{ij} \geq 0$ in the Lagrangian of optimization~(2).
+	
+	\item It is dedicated to the derivation of ${}^w \lambda^{i j} =0, \,  \forall j \ne i$.
+\end{itemize}
+These clarifications can be found in the second paragraph of Section III-B and also highlighted in the proof of Theorem~1.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	The statement of Theorem 1 is incomplete since $\rho^{ij}$ is not
+	defined. Also, it seems that the choice of $w^{ij}$ affects the
+	definition of neighbor agents $\mathcal{N}^i$, and hence the repulsive
+	terms that affect the motion of agent i.
+	Could there be cases where livelocks can be caused due to the agents trying to resolve deadlocks
+	between different types of active repulsive forces (i.e., switching back and forth between different repulsive configurations)?
+}
+
+
+\textbf{A:}
+Thanks for this constructive comment.
+To begin with, $\rho^{ij}$ as a designed parameter is chosen as follows:
+\begin{equation*} 
+	\begin{aligned}
+		\rho^{ij} &= \rho_0\, e^{\left( \eta^i(t) \, \sin \theta^{i j}\right)},\\
+		\eta^i(t) &= \left\{
+		\begin{array} {rrll}
+			&\eta^i(t-h) + \Delta \eta,  &\mbox{if}\; b^i_\text{TO} = True; \\
+			&0,                          &\mbox{if}\; \ w^{i j} = \epsilon, \forall j \ne i;\\
+			&\eta^i(t-h),                &\text{otherwise}.
+		\end{array}	\right.
+	\end{aligned}
+\end{equation*}
+The proof feasibility in Theorem~1 does not impose any additional constraint on the value of~$\rho^{ij}$. 
+Moreover, it is worth noting that $\mathcal{N}^i$ does not denote the set of neighbors,
+which is actually defined in Theorem~4 as
+$$ \left\{ j \ | \ \| p^i-~p^j\| \leq 2 v_{\text{max}} K h+r^{\prime}_{\text{min}}+2 \epsilon \right\}.$$
+
+Furthermore, recall that the cost function defined in~(11), i.e., 
+\begin{equation*} 
+	C^i_w = \sum_{j \neq i} \rho^{ij} (\frac{w^{i j} }{\epsilon}-\ln w^{i j}).
+\end{equation*}
+Since~$\frac{\partial C^i_w}{\partial w^{ij}}|_{w^{ij}=\epsilon}=0$ holds, 
+\textcolor{blue}{
+it indicates that the value of~$C_\omega^i$ changes smoothly as robots enters or leaves~$\mathcal{N}^i \triangleq \left\{ j \ | \ w^{ij}<\epsilon \right\}$.
+In contrast, $C^i_w \triangleq -\sum_{j \neq i} \rho^{ij} \ln w^{i j}$ changes in a discontinuous way and in turn $\mathcal{N}^i$.
+More specifically, in terms of force equilibrium, via definition, the magnitude of repulsive force is equal to
+\begin{equation*}
+	\lambda_{K}^{i j}=-\frac{\partial C^{i}}{\partial w^{i j}}=-\rho^{ij} \frac{w^{i j}-\epsilon}{ \epsilon w^{i j} },
+\end{equation*} 
+i.e, equation~(18).
+When crossing the boundary, the repulsive force is continuously changed instead of a step change like 
+$C^i_w \triangleq -\sum_{j \neq i} \rho^{ij} \ln w^{i j}$ where the minimum magnitude is 
+$ \frac{\rho^{ij}}{\epsilon}$.
+By comparison, discontinuous force is more likely to cause an oscillation between no repulsive force and an overlarge one since the force equilibrium always cannot exists when the required repulsive force is less than $\frac{\rho^{ij}}{\epsilon}$. 
+All above, the property of continuity is of great benefit to avoid the switching phenomenon.
+}
+
+
+
+Thirdly, we acknowledge that livelocks cannot be excluded theoretically in this work and remain parts of our future work.
+Thus, we have removed this claim in the revision.
+Nonetheless, extensive numerical simulations and hardware experiments in Section V-B have demonstrated a 100\% success rate without any livelock among one thousand tests.
+In contrast, other methods such as detour points have a much higher occurrence of both deadlocks and livelocks.
+Detailed comparisons can be found in Page~11.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{Q:}
+\emph{
+	Why is the terminal overlap chosen as a 2-step horizon? What
+	justifies the choice of no shorter or no longer?
+}
+
+\textbf{A:}
+Thanks for this insightful and meaningful question.
+A duration longer than~$2$ steps can also be adopted as necessary conditions of a deadlock.
+However, longer duration implies later detection of potential deadlocks.
+Detailed clarifications have been added in the second paragraph of Section III-D.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	The proof about the argument that the robots cannot return back to
+	the deadlock by resetting the value of $\rho^{ij}$ to $\rho_0$ is not clear.
+	Can you elaborate? And again, how is the possible switching among
+	deadlock configurations avoided? Intuitively I would expect that some
+	assumptions on the geometry/location of the targets should be in place?
+}
+
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=0.98\linewidth]{figs/2D_3_IMPC-DR}
+%	\caption{When $t=3.0$s, the blue agent (indexed as $1$) will leave the warning between blue (indexed as 2) and orange (indexed as $3$). Moreover, for the blue, it will have $w^{12}=\epsilon$ and $w^{13}=\epsilon$.}
+%	\label{2D_3}
+%\end{figure}
+
+\textbf{A:}
+Thanks for this constructive comment.
+First of all, it should be $w^{ij}=\epsilon$, where $\epsilon$ is the width of the warning band and this typo has been corrected in equation~(22), i.e, 
+\begin{equation*} 
+	\begin{aligned}
+		\rho^{ij} &= \rho_0\, e^{\left( \eta^i(t) \, \sin \theta^{i j}\right)},\\
+		\eta^i(t) &= \left\{
+		\begin{array} {rrll}
+			&\eta^i(t-h) + \Delta \eta,  &\mbox{if}\; b^i_\text{TO} = True; \\
+			&0,                          &\mbox{if}\; \ w^{i j} = \epsilon, \forall j \ne i;\\
+			&\eta^i(t-h),                &\text{otherwise}.
+		\end{array}	\right.
+	\end{aligned}
+\end{equation*}
+and the fourth paragraph of Section~III-D, Page~7.
+When $w^{ij}=\epsilon$ holds, it is evident that $p^i_K$ must be outside the warning band and thus $j \notin \mathcal{N}^i$.
+This further indicates that robot $i$ is not affected by robot $j$ after $\eta^i$ returns to its initial value.
+\textcolor{blue}{However, since livelock is not theoretically resolvable in this work, we have deleted the agreement about livelock avoidance in the proof of Theorem~2.}
+
+\textcolor{blue}{Regarding the livelock caused by switching, we acknowledge that it is possible. 
+Nonetheless, via elaborately designing cost function~(11), i.e.,
+\begin{equation*} 
+	C^i_w = \sum_{j \neq i} \rho^{ij} (\frac{w^{i j} }{\epsilon}-\ln w^{i j}).
+\end{equation*}
+this problem is avoided in our random tests provided in Page~11.}
+
+Moreover, after our re-check, we find that your intuition is right.
+In previous version, there exists an error in Theorem~2 and the relevant proof.
+Concretely, the equality 
+$\sin(\theta^{ij})  (1 - e^{(\delta \eta \sin(\theta^{ij}))})=0$ indeed exists when
+$\theta^{ij} = 0, \pi$ holds for $\forall j \ne i$.
+This indicates that the singularity of $\theta^{ij}$ may induces potential deadlocks.
+Fortunately, we find that the deadlocks caused by this singularity are unstable and can be easily avoided.
+Both Theorem 2 and Lemma 3 are revised accordingly to take into account this singularity formally.
+More specifically, the following changes have been made in the revision:
+
+\begin{itemize}
+	\item Two explicit conditions have been added in Theorem~2 to exclude stable deadlocks. Namely, 
+	assuming that (i) $\| p^i_\text{target} - p^j_\text{target} \| > r^\prime_\text{min}+2\epsilon$
+	holds for $\forall i \ne j$;
+	and (ii) projections of the targets of three or more robots onto the horizontal plane are not collinear, holds, 
+	no stable deadlocks exist.
+	Notably, these conditions are not restrictive and can be easily fulfilled by slightly adjusting the target positions, as explained also in Remark 7.
+	
+	\item Regarding the case of two robots, we find that it has three possible patterns which are shown in Fig.~\ref{figure:2_deadlock-2}.
+	Consider the first pattern shown in Fig.~\ref{figure:2_deadlock-2} (a).
+	Lemma~3 in the appendix shows that it is unstable and any small deviation can drive both robots to leave the deadlock.
+	The other two patterns are proven to be invalid due to the condition of deadlocks.
+	Detailed explanations can be found in the proof of Theorem~2.
+	
+	\item The fact that the pattern shown in Fig.~\ref{figure:2_deadlock-2}~(a) is unstable is proven formally in Lemma~3.
+	More specifically, we utilize the definition from [50] that there exists a closed bound $\mathcal{B}^R$ around the deadlock state,
+	such that an initial state can be found in an arbitrarily-small closed bound $\mathcal{B}^r\subset \mathcal{B}^R$ from which the system can leave $\mathcal{B}^R$.
+	Thus, two bounds denoted as $\mathcal{B}^i_d(r_d)$ as shown in Fig.~\ref{figure:unstable_deadlock-2-2} are derived for robot $i=1,2$, respectively. 
+	Within this bound, both robots $1$ and $2$ have the tendency to move along the direction of $\tau$ as shown in Fig.~\ref{figure:unstable_deadlock-1-2}.
+	It leads to the a monotonic increase of $\beta$ as illustrated in Fig.~\ref{figure:unstable_deadlock-2-2}.
+	Consequently, for an arbitrarily small $\beta$, $p^1_k$ or $p^2_K$ must leave the aforementioned bound in finite time which fulfills the definition of instability from [50].
+	The detailed proof of instability is provided in Lemma~3 of Appendix~B.
+\end{itemize}
+
+To sum up, Theorem 2 has been revised completely to exclude the singularity around $\theta^{ij}=0,\pi$. Two explicit conditions have been stated on the target positions of all robots such that all possible deadlocks are provably unstable.
+Detailed changes can be found in Theorem 2 on Page 8 and Lemma~3 of Appendix~B.
+$\hfill\blacksquare$
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figs/2_deadlock}
+	\caption{
+		Illustration of three possible cases when two robots form an unstable deadlock.
+	}
+	\label{figure:2_deadlock-2}
+\end{figure}
+
+\begin{figure}[t]
+	\centering
+	\subfigure[Robot $1$ has the motion tendency that along the $\tau$.]{
+		\includegraphics[width=0.6\linewidth]{figs/unstable_deadlock_1}
+		\label{figure:unstable_deadlock-1-2}
+	}
+	\quad
+	\subfigure[The angle $\beta(t)$ has the tendency to be increased such that $p^1_K$ or $p^2_K$ cannot be bounded.]{
+		\includegraphics[width=0.6\linewidth]{figs/unstable_deadlock_2}
+		\label{figure:unstable_deadlock-2-2}
+	}
+	\caption{The deadlock shown in Fig.~\ref{figure:2_deadlock}(a) is unstable.}
+\end{figure}
+
+\hspace*{\fill} \
+
+%===========================================================
+
+
+
+%===========================================================
+
+\textbf{Q:}
+\emph{
+	The recursive feasibility proof relies on knowledge of $\epsilon$ and
+	K. Similarly to the comments above, how are those chosen? Can one know
+	a prior exact values of $\epsilon$ and K that make the problem feasible?
+}
+
+\textbf{A:}
+Thanks for this insightful comment.
+To begin with, the choice of~$\epsilon$ can be arbitrary as long as~$\epsilon>0$,
+which does not affect the proof of feasibility in Theorem 1.
+However, effectiveness of the proposed deadlock resolution scheme is closely related to~$\epsilon$.
+In general, a larger $\epsilon$ usually results in a better performance in deadlock resolution,
+but it also requires a larger distance between the targets of all robots, as the precondition in Theorem~2 states that $\| p^i_\text{target} - p^j_\text{target} \| > r^\prime_\text{min}+2\epsilon$.
+Thus, it is set to $\epsilon\in (\frac{r_\text{min}}{6},\frac{r_\text{min}}{2})$ in our numerical examples.
+Detailed modifications can be found in the second paragraph of Section III-A, Page~3.
+
+Secondly, regarding the choice of $K$, it can be any positive integer as the proof of feasibility in Theorem 1 does not impose any additional constraint.
+In our numerical examples, $K$ is set to~$K > \frac{v_\text{max}}{a_\text{max}h}$ 
+such that the robot can reduce its velocity from maximum to zero within the horizon.
+These clarifications have been added to the first paragraph of Section II-C.
+
+\todo{I suppose $K$ and $\epsilon$ should be uniform across the robots, right?}
+\textcolor{green}{It is right. More specifically, the diameter and the maximum velocity and acceleration can directly affect $K$ and $\epsilon$.}
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+%===========================================================
+
+\textbf{C:}
+\emph{
+	The authors mention earlier work on resolving deadlocks using
+	heuristics such as the clockwise maneuvering. How is their method with
+	the use of attractive and repulsive forces comparing to the approach in
+	the following reference? Garg et al, Finite-Time Estimation and Control for Multi-Aircraft
+	Systems Under Wind and Dynamic Obstacles,
+	https://arc.aiaa.org/doi/10.2514/1.G003967
+}
+
+\textbf{A:}
+Thanks for providing this relevant reference.
+It has been added to the references as~[36].
+It provides a theoretical analysis for the clockwise maneuver and the condition of deadlock is also presented as an equilibrium of forces.
+However, the proposed deadlock resolution scheme is rather different:
+\begin{itemize}
+	\item At first, the work in [36] provides an artificial potential field based method where the current acceleration is determined other than a planned trajectory as ours.
+	Thus, the proposed method has the ability to early detect a potential deadlock.
+	
+	\item The work in [36] handles a deadlock via directly enforcing a motion tendency in the tangent direction in addition to proves that this adjustment make sense.
+	On the contrary, in this work, by adjusting repulsive force, the robot indirectly obtain a motion tendency to leave the stuck point. 
+	
+	\item The proposed mechanism in [36] is instantaneous as the maneuvering is triggered if and only if the deadlock happens. By contrast, in the proposed method, as shown in following equation 
+	\begin{equation*} 
+		\begin{aligned}
+			\rho^{ij} &= \rho_0\, e^{\left( \eta^i(t) \, \sin \theta^{i j}\right)},\\
+			\eta^i(t) &= \left\{
+			\begin{array} {rrll}
+				&\eta^i(t-h) + \Delta \eta,  &\mbox{if}\; b^i_\text{TO} = True; \\
+				&0,                          &\mbox{if}\; \ w^{i j} = \epsilon, \forall j \ne i;\\
+				&\eta^i(t-h),                &\text{otherwise},
+			\end{array}	\right.
+		\end{aligned}
+	\end{equation*} even if the deadlock is not detected as $b_\text{TO} \ne True$, the adjustment is remained as $\eta^i$ will not return to $0$ which indicates an abiding effect.
+\end{itemize}
+Detailed comparisons can be found in the second paragraph of Section I, Page~2.
+$\hfill\blacksquare$
+
+\hspace*{\fill} \
+
+
+
+\end{document}

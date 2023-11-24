@@ -1,0 +1,10 @@
+1 先了解ltl是如何和控制联系起来的
+    a.了解ltl  看principle of model checking 第2,3，5章 大致了解语义就行 最后当工具书用
+    b.了解ltl + control  这里有两个路径，自下而上自上而下，推荐看国老师的毕业论文 非常深入浅出
+2 了解ltl在控制的代码操作
+    a.看 这个项目 里面 有最基础的ltl+control  https://github.com/MengGuo/P_MAS_TG
+    了解ltlplanner的作用
+3 ltl->偏序
+    看泽森的论文 然后 复现代码 https://github.com/LiuZesensengsheng/LTL_MAS_C-action
+4 偏序->动态
+   看jk_game这个项目 https://github.com/LiuZesensengsheng/JK_game

@@ -1,0 +1,315 @@
+\documentclass[10pt, Oct]{IEEEtran}
+
+\IEEEoverridecommandlockouts% This command is only needed if 
+ 
+\usepackage{times}
+\usepackage{multicol}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{amssymb}
+\usepackage{amsmath, amsfonts}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{standalone}
+\usepackage{booktabs}
+%\usepackage{algorithm,algorithmicx,algpseudocode}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{mdframed}
+\usepackage{fancyvrb}
+\usepackage{soul}
+\usepackage{dsfont,mathabx}
+
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+\newtheorem{problem}{Problem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proof}{Proof}
+
+
+% GENERAL
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+\newcommand{\improve}[1]{\textcolor{cyan}{IMPROVE: #1}}
+\newcommand{\note}[1]{\textcolor{blue}{NOTE: #1}}
+\newcommand{\question}[1]{\textcolor{orange}{Q: #1}}
+\newcommand{\todoliu}[1]{\textcolor{green}{TODOLIU: #1}}
+\newcommand{\noteliu}[1]{\textcolor{green}{NOTELIU: #1}}
+\title{
+Search methods
+}
+\begin{document}
+	
+\maketitle
+\section{Mathematical Models}
+Given a poset $P=\{\Omega,C_{parallel},C_{partial}\}$, where $\Omega$ is an anchor function in order to give each task a sequence number. Its  domain of definition is ${1,\cdots,n}$. and $C_{parallel}={(i,j)}$ where $\Omega(i)$ and $\Omega(j)$ is independent; $C_{partial}={(i<j)}$, where $\Omega(i)$ must be executed before $\Omega(j)$. The poset $P$ can be regarded as the temporal order of tasks. And we give $N$ as the agents number with difference action, and $l$ as the place we interested. We want to find out the minimum execution time of the $P$ with agents $N$.
+
+To go further, we give the table of definition for these question models.
+\begin{table}[h]
+
+	\begin{tabular}{|l|p{0.5\columnwidth}|p{0.2\columnwidth}|}\hline
+		Variable &\multicolumn{2}{c|}{ Variable definition }\\\hline
+		Name & definition & range \\
+		$P$ & partial order set& \\
+		$m$  & number of agents & $\mathcal{N}$\\
+		$n$ & number of tasks & $\mathcal{N}$ \\
+		$o$ & number of serves type agent can provide & $ \mathcal{N}$\\
+		$\Omega$ & anchor function &\\
+		$r_{i,j,k,l}$ & agent $i$ execute task $j$ providing serve $l$ in the order $k$ & $\{0,1\}$\\ 
+		$t_j$ & begin time of task $j$ & $t_j>0$ \\
+		$p_j$ & continue time of task $j$ & $p_j >0$\\
+		$a_{j,l}$ & number of servey $l$ task $j$ needed. & $\mathcal{N}$\\
+		$b_{i,l}$ & type of servey $l$ that agent $i$ can provide & $\{0,1\}$ \\
+		$v_i$ & velocity of agent $i$ &   $v_i>0$\\
+		$e_{i,j_1,j_2,k}$& agent $i$ go from the place of $j_1$ to $j_2$  at $k th$ task& $\{0,1\}$ \\
+		$dis_{j_1,j_2}$ & distance from task $j_1$ to task $j_2$ &  $dis_{j_1,j_2}>0$\\
+		$dis_{i,j}$ & distance from initial $i$ to task $j$ & $dis_{i,j}>0$\\\hline
+	\end{tabular}
+	\centering
+	\caption{variable definition}
+
+	\label{tab:Margin_settings}
+
+\end{table}
+
+$$\min_{r_{i,j,k,l}, t_j} \quad \max(t_j+p_j)$$
+s.t.\\
+Temporal constraint of tasks:
+\begin{equation}
+	t_{j_1}+p_{j_1}\leq t_{j_2} \quad  \forall (j_1,j_2)\in C_{partial}\\
+	  \label{1}
+\end{equation}
+provide enough serves for the task $j$ 
+\begin{equation}
+  \sum_{i=1}^{m}\sum_{k=1}^{n}r_{i,j,k,l}b_{i,l}= a_{j,l}   \quad \forall j,l 
+  \label{2}
+\end{equation}
+one agent can only provide the serve it has:
+
+\begin{equation}
+r_{i,j,k,l}\leq b_{i,l}   \quad \forall i,j,k,l
+\label{3}
+\end{equation}
+One agent can execute one task no more than once:
+\begin{equation}
+\sum_{k=1}^{n}\sum_{l=1}^{o}r_{i,j,k,l} \leq 1   \forall i,j
+\label{4}
+\end{equation}
+One agent at any time can execute no more than one task:
+\begin{equation}
+	\sum_{j=1}^{m}\sum_{l=1}^{o}r_{i,j,k,l} \leq 1    \forall i,k
+	\label{5}
+\end{equation}
+One agent can execute $k+1th$ task only if it execute $kth$ task.
+\begin{equation}
+\sum_{j=1}^{m}\sum_{l=1}^{o}r_{i,j,k,l} - \sum_{j=1}^{m}\sum_{l=1}^{o}r_{i,j,k+1,l}\leq  0    \qquad\forall i,k<m-1
+\label{6}
+\end{equation}
+Even agent need to obey the motion constrain.
+
+\begin{equation}
+t_{i_2}-t_{i_1} -M\sum_{l=1}^o r_{i,j_1,k,l}-M\sum_{l=1}^o r_{i,j_2,k+1,l}  \geq dis_{j_1,j_2}/v+p_{i_1}-2M   \forall i,j
+\label{7}
+\end{equation}
+
+\begin{equation}
+t_{i} -M\sum_{l=1}^o r_{i,j,1,l} \geq dis_{i,j}/v-M \qquad  \forall i,j
+\label{8}
+\end{equation}
+\remark{here I don't consider the conflict of area that we allow different tasks execute in one place at same time.}
+\remark{Here the function is to solve the prefix, and circle need a further consideration that they need to go back to initial place and the initial place is also variables to consider.}
+%========================================
+\section{Baseline method for MILP}
+Firstly, we use MILP to solve the optimial question as the baseline, and the complexity analysis will be given here(laaaaaater). 
+
+\section{Branch and bound method}
+Branch and bound method performs well in integer programming (but not 01 programming).
+Branch and bound method is an accelerated methods to recursively split the search into smaller spaces, then minimizing the goal function on these smaller spaces. When checking the lower bounds on small search space, we use the linear programming method which computing complex is P-hard. Thus, we can get the optimal value much faster than MILP method. See algorithm \ref{alg:1}.
+
+
+\begin{algorithm}
+	\caption{Branch and bound}
+	\label{alg:1}
+	\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+	\Input {The Optimal question $\mathcal{Q}$}
+	\Output  {Optimal value , answer}
+	Generate relaxation Linear programming problem $\mathcal{Q}'_0$\\
+	$Z:=+\infty$ \%{set} the best cost so far\\
+	$S:=\{\mathcal{Q}'_0\}$  \% generate the first branch \\
+	\While{$S\neq \phi$}{
+		remove $\mathcal{Q}'_i$ from $S$\\
+		solve $\mathcal{Q}'_i$ \\
+		\If{ $\mathcal{Q}'_i$ is feasible }{
+			let $\beta$ be optimal basic solution of $\mathcal{Q}'_i$\\
+			\eIf{$\beta$ satisfies integrality constraints}{\If{ $cost(\beta)<Z$}{store $\beta$ and update $Z$}}{
+				\If{$cost(\mathcal{Q}'_i)< Z$}{let $x_j$ be part of binary variables satisfied\\
+					$S:=S\cup\{ \mathcal{Q}'_0\ \land{x_j}=0, \mathcal{Q}'_0\ \land {x_j}=1\}$
+	}}}}
+	Return $Z$, $\beta$
+\end{algorithm}
+
+\begin{algorithm}
+	\caption{Branch and bound}
+	\label{alg:2}
+	\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+	\Input {The Optimal question $\mathcal{Q}$}
+	\Output  {Optimal value , answer}
+	Generate relaxation Linear programming problem $\mathcal{Q}'_0$\\
+	$Z:=+\infty$ \%{set} the best cost so far\\
+	$S:=\{\mathcal{Q}'_0\}$  \% generate the first branch \\
+	\While{$S\neq \phi$}{
+	remove $\mathcal{Q}'_i$ from $S$\\
+	solve $\mathcal{Q}'_i$ \\
+	\If{ $\mathcal{Q}'_i$ is feasible }{
+	let $\beta$ be optimal basic solution of $\mathcal{Q}'_i$\\
+	\eIf{$\beta$ satisfies integrality constraints}{\If{ $cost(\beta)<Z$}{store $\beta$ and update $Z$}}{
+	\If{$cost(\mathcal{Q}'_i)< Z$}{let $x_j$ be part of binary variables satisfied\\
+	  $S:=S\cup\{ \mathcal{Q}'_0\ \land{x_j}=0, \mathcal{Q}'_0\ \land {x_j}=1\}$
+}}}}
+   Return $Z$, $\beta$
+\end{algorithm}
+
+However, due to the constraint of equation \ref{3} \ref{4}, the feasible solution can be really sparse that means most of branch is unfeasible. And search these branches may cause a waste of time. 
+
+\subsection{lower bound}
+
+We raise several celerity methods to get the lower bound of the branches. To a branch $N$ fetched by node routing methods from the search tree, there are a set of tasks $T_s$ has been already assigned and another set of tasks $T_l$ waiting for assignment. For the assigned tasks $T_s$, we calculate the time without any simplification as boundary conditions. 
+For the unassigned tasks $T_l$, we consider the simplified situation by only consider part of information from agent serial number $i$, task serial number $j$, task order $k$, sub-task type $l$:
+\begin{enumerate}
+	\item $i + j+k$  
+	\item $i+j+l$
+	\item $i+j$
+	\item $j+k$
+\end{enumerate}
+For situation 1, we ignore the sub-task constrains. That means the answer may exist that we ask the agents without required functionality to execute one task. So the optimal value can be less than the real value as the lower bound:
+ $$\min_{r_{i,j,k}, t_j} \quad \max(t_j+p_j)$$
+ s.t.\\
+ 
+ Temporal constraint of tasks:
+ \begin{equation}
+ t_{j_1}+p_{j_1}\leq t_{j_2} \quad  \forall (j_1,j_2)\in C_{partial}\\
+ \end{equation}
+ provide enough serves for the task $j$ 
+ \begin{equation}
+ \sum_{i=1}^{m}\sum_{k=1}^{n}r_{i,j,k}b_{j}= a_{j}   \quad \forall j
+ \end{equation}
+ one agent can only provide the serve it has:
+ \begin{equation}
+ r_{i,j,k}\leq b_{i}   \quad \forall i,j,k
+ \label{3}
+ \end{equation}
+ One agent can execute one task no more than once:
+ \begin{equation}
+ \sum_{k=1}^{n}r_{i,j,k} \leq 1   \forall i,j
+ \end{equation}
+ One agent at any time can execute no more than one task:
+ \begin{equation}
+ \sum_{j=1}^{m}r_{i,j,k} \leq 1    \forall i,k
+ \end{equation}
+ One agent can execute $k+1th$ task only if it execute $kth$ task.
+ \begin{equation}
+ \sum_{j=1}^{m}r_{i,j,k} - \sum_{j=1}^{m}r_{i,j,k+1}\leq  0    \qquad\forall i,k<m-1
+ \end{equation}
+ Even agent need to obey the motion constrain.
+ 
+ \begin{equation}
+ t_{i_2}-t_{i_1} -M r_{i,j_1,k}-Mr_{i,j_2,k+1}  \geq dis_{j_1,j_2}/v+p_{i_1}-2M   \forall i,j
+ \end{equation}
+ 
+ \begin{equation}
+ t_{i} -M r_{i,j,1} \geq dis_{i,j}/v-M \qquad  \forall i,j
+ \end{equation}
+ 
+For situation 2:
+ $$\min_{r_{i,j,l}} \quad \max(\sum_{j=1}^{m}\sum_{l=1}^{o}r_{i,j,l}p'_j)$$
+s.t.\\
+provide enough serves for the task $j$ 
+\begin{equation}
+\sum_{i=1}^{m}r_{i,j,l}b_{i,l}= a_{j,l}   \quad \forall j,l 
+\end{equation}
+one agent can only provide the serve it has:
+\begin{equation}
+r_{i,j,l}\leq b_{i,l}   \quad \forall i,j,l
+\end{equation}
+One agent can execute one task no more than once:
+\begin{equation}
+\sum_{l=1}^{o}r_{i,j,l} \leq 1   \forall i,j
+\end{equation}
+The motion constrains are embodied in execution time that we add the minimum motion time to the task execution time.
+\begin{equation}
+ p'_j=p_j+\min\{dis_{j,j'}/v_max,dis_{i,j}/v_max\}
+\end{equation}
+
+
+For situation 3:
+
+$$\min_{r_{i,j}} \quad \max(\sum_{j}^{m}r_{i,j}p_j)$$
+Serves constraints:
+\begin{equation}
+\sum_{i=1}^{n}r_{i,j}=a_j
+\end{equation}
+We add the execution time to Simplified motion constraints, the estimate execute time is 
+\begin{equation}
+p_j=\min_{a_{j,l}}\{dis_{j',j},dis_{i_l,j}\}+p_j
+\end{equation}
+
+For situation 4:
+$$\min_{r_{j,k}, t_j} \quad \max(t_j+p_j)$$
+s.t.\\
+
+Temporal constraint of tasks:
+\begin{equation}
+t_{j_1}+p_{j_1}\leq t_{j_2} \quad  \forall (j_1,j_2)\in C_{partial}\\
+\end{equation}
+We add the execution time to Simplified motion constraints, the estimate execute time is 
+\begin{equation}
+p_j=\min_{a_{j,l}}\{dis_{j',j},dis_{i_l,j}\}+p_j
+\end{equation}
+
+
+In my half-baked assumption, I think these low bound method can be used with combination. We can use it as the in mechine learning do that use more accurate algorithm first to cut down the branch faster and use the less accurate algorithm later to explore branches faster.(Even the opposite is true but it should be faster than only use one method)
+
+\section{local search method}
+Local search is the best way to deal with 01 programming.
+Local search is a sequential search method. The search path forms a track, aiming at the current point (solution), and tries to find a better solution from its neighborhood to replace the current solution. If no solution is found, the search should be stopped.
+There are two type methods of local search method. The first searching space is composed of feasible solutions and we begin from one node and choose its neighborhoods (other solutions) by checking the value of solutions. Another method focus on a contract sub-question called VNDS (variable neighborhood decomposition search). When it gets an initial feasible solution,  it defined a sub-question by remaining $k$ variables invariant, and $n-k$ variable are alterable. Let local search method search $n-k$ free variables.
+Any local search can get a local optimum, but if an algorithm doesn't have the ability to jump out the local optimum, we will call it Hill Climbing method. (I guess the local optimum in this question is also global).
+Usually, the distribution of feasible solutions in search space is sparse, so local search method can found a better solution in shorter time than other method.
+
+As algorithm \ref{alg:2} showed, the core of a Hill Climbing local search method is the definition of neighbors. I put forward three kinds of neighbors definitions here and plan to try it in code later.
+\begin{itemize}
+\item [1)]
+    Given a feasible solution, we defined a small neighbor area and a lager neighbor area. The small neighbor area relation is we can exchange any two task in one agent if feasible. The large neighbor area is fetching one task from an agent and put it to another(the small neighbor area will not lead to exchange in the large neighbor area).
+    
+    This method can find the optimal solution of one combination and change to another combination.
+\item [2)]
+    Given a feasible solution, fetch one action and put it in any other feasible place.
+\item [3)]
+    Given a feasible solution, defined a sub-question: $k$ variables in this question are invariable, other $n-k$ variables are alterable. And we use local search these $n-k$ variables.
+\end{itemize}
+
+\begin{algorithm}
+	\caption{Basic local search}
+	\label{alg:3}
+	\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+	\Input {The Optimal question $\mathcal{Q}$,round $m$}
+	\Output  {Optimal value , answer}
+	Generate initial Solution $s_0$\\
+	k=0\\
+	\While{$k<m$}{
+		$s'=FindBestNeighbor(s)$
+		\If{$Q(s')<Q(s))$}{ $s=s'$\\
+			$k=k+1$
+		
+	}
+	}
+	Return $Q(s)$, $s$
+\end{algorithm}
+
+
+\section{parallel local bound method}
+During the search progress, the method usually works serially which speed are only limited by the magnitude of CPU frequency, we can use more core to computing the answers which may increase computing speed by several times. However, due to the difficulty of code, I plan to realize it at last.
+
+\bibliographystyle{IEEEtran}
+\end{document}

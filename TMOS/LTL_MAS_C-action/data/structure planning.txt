@@ -1,0 +1,14 @@
+1 期计划目标
+    实现基于networkx的自动生成motion model的WTS（单个智能体）
+    实现actions model的WTS
+    实现macro-action model的WTS
+    实现每个model之间的圈乘
+
+ts中的类： 
+ActionModel(object)  
+MotionFts(DiGraph)
+计划添加的类
+class Prod_MotActModel(object):
+对每个模型之间进行圈乘
+class MacroActionModel(object):
+对圈乘后的模型，添加上基于Macro_action的边

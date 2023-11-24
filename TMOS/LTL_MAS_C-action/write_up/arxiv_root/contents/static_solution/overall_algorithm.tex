@@ -1,0 +1,75 @@
+\subsection{Overall Algorithm}\label{subsubsec:overall-algorithm}
+
+%=======================================
+\begin{algorithm}[t]
+	\caption{Complete algorithm for time minimization
+        under collaborative temporal tasks}
+	\label{alg:complete}
+	\SetKwInOut{Input}{Input}
+        \SetKwInOut{Output}{Output}
+	\Input {Task formula~$\varphi$, time budget~$t_0$.}
+	\Output {Assignment~$J^\star$,  makespan~$T^\star$}
+	Compute $\mathcal{B}_{\varphi}$ given~$\varphi$ \tcp*{\cite{gastin2001fast}}
+	Compute $\mathcal{B}^{-}_{\varphi}$ by pruning~$\mathcal{B}_{\varphi}$
+        \tcp*{Sec.~\ref{subsubsec:NBA-pruning}}
+        Initialize $\mathcal{J}=\emptyset$;\\
+        \While{$time<t_0$}{
+	$P_{\varphi}\leftarrow \texttt{compute\_poset}(\mathcal{B}^{-}_{\varphi})$
+        \label{algline:comp-poset} \tcp*{Alg.~\ref{alg:compute-poset}}
+        $(J,\, T)\leftarrow \texttt{BnB}(P_{\varphi})$
+        \label{algline:BnB} \tcp*{Alg.~\ref{alg:BnB}}
+        Store $(J,\,T)$ in $\mathcal{J}$;\\
+        }
+        Select~$J^\star$ with minimum $T^\star$ among $\mathcal{J}$;\\
+	\textbf{Return} $J^\star$, $T^\star$;
+\end{algorithm}
+%=======================================
+
+The complete algorithm can be obtained by combining
+Alg.~\ref{alg:compute-poset} to compute posets
+and Alg.~\ref{alg:BnB} to assign sub tasks in the posets.
+More specifically, as summarized in Alg.~\ref{alg:complete},
+the NBA associated with the given task~$\varphi$ is derived and pruned as
+described in Sec.~\ref{alg:compute-poset}.
+Afterwards, within the allowed time budget~$t_0$,
+once the set of posets~$\mathcal{P}_{\varphi}$ derived from
+Alg.~\ref{alg:compute-poset}
+is nonempty, any poset $P_\varphi\in \mathcal{P}_{\varphi}$ is fed to
+the task assignment Alg.~\ref{alg:BnB} to compute the current best
+assignment~$J$ and its makespan~$T$, which is stored in
+a solution set~$\mathcal{J}$.
+This procedure is repeated until the computation time elapsed.
+By then, the optimal assignment~$J^\star$ and its makespan~$T^\star$
+are returned as the optimal solution.
+
+\begin{remark}\label{remark:parallel}
+It is worth noting that even though Alg.~\ref{alg:compute-poset} and
+Alg.~\ref{alg:BnB} are presented sequentially in
+Line~\ref{algline:comp-poset}~-~\ref{algline:BnB}.
+They can be implemented and run {in parallel}, i.e., more posets are
+generated and stored in Line~\ref{algline:comp-poset},
+while other posets are used for task assignment in Line~\ref{algline:BnB}.
+Moreover, it should be emphasized that Alg.~\ref{alg:complete} is an \emph{anytime}
+algorithm meaning that it can run for any given time budget and generate the
+current best solution.
+As more time is allowed, either better solutions are found or confirmations are
+given that no better solutions exist.
+%% As discussed in Sec.~\ref{sec:introduction}, this property is particularly useful
+%% for real-time applications where computation time is limited.
+\hfill  $\blacksquare$
+\end{remark}
+
+
+
+
+Finally, once the optimal plan~$J^\star$ is computed with the format
+defined in~\eqref{eq:complete-assignment}, i.e.,
+an optimal sequence of subtasks~$\omega_1\omega_2\cdots\omega_{K_n}$ is assigned
+to agent~$n$ with the associated time stamps~$t_1t_2\cdots t_{K_n}$.
+In other words,
+agent~$n$ can simply execute this sequence of subtasks at the designated time,
+namely $\omega_k$ at time~$t_k$.
+Then, it is ensured that the overall task can be fulfilled in minimum time.
+However, such a way of execution can be prone to uncertainties in the system
+model such as fluctuations in action duration
+and failures during execution, which will be discussed in the next section.

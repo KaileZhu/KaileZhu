@@ -1,0 +1,2 @@
+automatica_root是删减的版本
+fianl_automatica_root 是未删减的automatica的版本 

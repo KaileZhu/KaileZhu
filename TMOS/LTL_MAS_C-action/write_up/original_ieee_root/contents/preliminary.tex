@@ -1,0 +1,65 @@
+ %==============================
+\section{Preliminary}\label{sec:preliminary}
+This section contains the preliminaries essential for this work,
+namely, Linear Temporal Logic, B\"uchi Automaton,
+and the general definition of partially ordered set,
+%==============================
+\subsection{Linear Temporal Logic (LTL)}\label{subsec:LTL}
+Linear Temporal Logic (LTL) formulas are composed of a set of atomic propositions $AP$
+in addition to several Boolean and temporal operators. Atomic propositions are Boolean variables that can
+be either true or false.  Particularly, the syntax~\cite{baier2008principles} is given as follows:
+$\varphi \triangleq \top \;|\; p  \;|\; \varphi_1 \wedge \varphi_2  \;|\; \neg \varphi  \;|\; \bigcirc \varphi  \;|\;  \varphi_1 \,\textsf{U}\, \varphi_2,$
+where $\top\triangleq \texttt{True}$, $p \in AP$, $\bigcirc$ (\emph{next}),
+$\textsf{U}$ (\emph{until}) and $\bot\triangleq \neg \top$.
+For brevity, we omit the derivations of other operators like $\Box$ (\emph{always}),
+ $\Diamond$ (\emph{eventually}), $\Rightarrow$ (\emph{implication}).
+The full semantics and syntax of LTL are omitted here for brevity,
+see e.g.,~\cite{baier2008principles}.
+
+An infinite {word} $w$ over the alphabet $2^{AP}$ is defined as an
+infinite sequence ${\omega}=\sigma_1\sigma_2\cdots, \sigma_i\in 2^{AP}$.
+The language of $\varphi$ is defined as the set of words that satisfy $\varphi$,
+namely, $L_\varphi=Words(\varphi)=\{\boldsymbol{\omega}\,|\,\omega\models\varphi\}$
+and $\models$ is the satisfaction relation.
+However, there is a special class of LTL formula called \emph{co-safe} formulas,
+which can be satisfied by a set of finite sequence of words.
+They only contain the temporal operators $\bigcirc$, $\textsf{U}$ and $\Diamond$
+ and are written in positive normal form.
+
+%==============================
+\subsection{Nondeterministic B\"uchi Automaton}\label{subsec:nba}
+
+Given an LTL formula $\varphi$ mentioned above, the associated Nondeterministic B\"{u}chi Automaton (NBA) can be derived with the following structure.
+%====================
+\begin{definition}[NBA] \label{def:nba}
+A NBA $\mathcal{B}$ is a 5-tuple: $\mathcal{B}=(Q,\,Q_0,\,\Sigma,\,\delta,\,Q_F)$,
+where $Q$ is the set of states;
+$Q_0\subseteq Q$ is the set of initial states;
+$\Sigma=AP$ is the allowed alphabet;
+$\delta:Q\times \Sigma\rightarrow2^{Q}$ is the transition relation;
+$Q_F\subseteq Q$ is the set of \emph{accepting} states. \hfill $\blacksquare$
+\end{definition}
+%====================
+
+Given an infinite word $w=\sigma_1\sigma_2\cdots$, the resulting \emph{run}~\cite{baier2008principles} within $\mathcal{B}$
+is an infinite sequence $\rho=q_0q_1q_2\cdots$
+such that $q_0\in Q_0$, and $q_i\in Q$, $q_{i+1}\in\delta(q_i,\,\sigma_i)$ hold for all index~$i\geq 0$.
+A run is called \emph{accepting} if it holds that
+$\inf(\rho)\bigcap {Q}_F \neq \emptyset$,
+where $\inf(\rho)$ is the set of states that appear in $\rho$ infinitely often.
+In general, an accepting run can be written in the prefix-suffix structure,
+where the prefix starts from an initial state and ends in an accepting state;
+and the suffix is a cyclic path that contains the same accepting state.
+It is easy to show that such a run is accepting if the prefix is repeated once,
+while the suffix is repeated infinitely often.
+In general, the size of~$\mathcal{B}$ is double exponential to the size of~$|\varphi|$.
+
+%==============================
+\subsection{Partially Ordered Set}\label{subsec:partial}
+A partial order~\cite{simovici2008mathematical} defined on a set $S$ is a relation $\rho\subseteq S\times S$,
+which is reflexive, antisymmetric, and transitive.
+Then, the pair $(S,\, \rho)$ is referred to as a partially ordered set (or simply \emph{poset}).
+A generic partial order relation is given by $\leq$.
+Namely, for $x,\,y\in S$, $(x,\,y)\in \rho$ if $x\leq y$.
+The set $S$ is totally ordered if $\forall x,\,y\in S$, either $x\leq y$ or $y\leq x$ holds.
+Two elements $x,\,y$ are incomparable if neither $x\leq y$ nor $y\leq x$ holds, denoted by $x\parallel y$.

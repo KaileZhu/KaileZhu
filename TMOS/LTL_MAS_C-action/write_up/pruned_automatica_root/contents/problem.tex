@@ -1,0 +1,90 @@
+%==============================
+\section{Problem Formulation}\label{sec:problem}
+
+%==============================
+\begin{figure*}[t!]
+	\centering
+	\includegraphics[width=0.9\linewidth]{figures/logic_fig1.pdf}
+	%--------------------
+	\caption{Overall structure of the proposed framework,
+          which consists of three main parts:
+        the computation of the posets, BnB search, and online execution.}
+	\label{fig:logic_graph}
+	%--------------------
+\end{figure*}
+%==============================
+
+%==============================
+\subsection{Collaborative Multi-agent Systems}\label{subsec:multi-agent}
+
+Consider a team of $N$ agents operating in a workspace as~${W}\subset \mathbb{R}^3$.
+Within the workspace, there are $M$ regions of interest,
+denoted by ${\mathcal{W}}\triangleq \{{W}_1,{W}_2,\,\cdots,{W}_M\}$, 
+where~${W}_m\in {W}$.
+Each agent~$n\in\mathcal{N}=\{1,\cdots,N\}$ can navigate within these regions
+following its own transition graph, i.e., $\mathcal{G}_n=({\mathcal{W}},\,\rightarrow_n,\,d_n)$,
+where $\rightarrow_n\subseteq {\mathcal{W}}\times {\mathcal{W}}$
+is the allowed transition for agent~$n$;
+and $d_n:\rightarrow_n \rightarrow \mathbb{R}_{+}$ maps each transition to its time duration.
+
+Moreover, similar to the action model used in our previous work~\cite{guo2016task},
+each robot $n\in \mathcal{N}$ is capable of performing a set of actions:
+$\mathcal{A}_n\triangleq \mathcal{A}^{\texttt{l}}_n \cup \mathcal{A}^{\texttt{c}}_n$,
+where $\mathcal{A}^{\texttt{l}}_n$ is a set of \emph{local} actions that can be independently performed by agent $n$ itself;
+$\mathcal{A}^{\texttt{c}}_n$ is a set of \emph{collaborative} actions that can only be performed
+in collaboration with other agents.
+Moreover, denote by~$\mathcal{A}^c\triangleq\bigcup_{n\in\mathcal{N}}\mathcal{A}^c_n$,
+$\mathcal{A}^l\triangleq\bigcup_{n\in\mathcal{N}}\mathcal{A}^l_n$.
+More specifically,
+there is a set of collaborative behaviors pre-designed for the team,
+denoted by~$\mathcal{C}\triangleq \{C_1,\cdots, C_K\}$. 
+Each behavior $C_k\in \mathcal{C}$ consists of a set of collaborative actions
+that should be accomplished by different agents, namely:
+\begin{equation}\label{eq:c-k}
+C_k\triangleq \{a_1,\,a_2,\cdots,a_{\ell_k}\},
+\end{equation}
+where~$\ell_k>0$ is the number of collaborative actions required;
+~$a_{\ell}\in \mathcal{A}^c$, $\forall \ell=1,\cdots,\ell_k$.
+Thus, each collaborative action has a fixed duration pre-defined by~$d:\mathcal{C}\rightarrow \mathbb{R}_{+}$.
+
+ 
+
+
+
+%==============================
+\subsection{Task Specification}\label{subsec:task-specification}
+First, the following three types of atomic propositions can be introduced:
+\begin{itemize}
+\item $p_m$ is \emph{true} when \emph{any} agent $n\in \mathcal{N}$ is at region ${W}_m\in {\mathcal{W}}$;
+Let $\mathbf{p}\triangleq \{p_m,\, \forall {W}_m \in {\mathcal{W}}\}$.
+\item $a^m_k$ is \emph{true} when a \emph{local} action~$a_k$ is performed at region ${W}_m\in{\mathcal{W}}$ by
+ agent~$n$, where $a_k \in \mathcal{A}_n^{\texttt{l}}$.
+Let~$\mathbf{a} \triangleq\{a^m_k,\forall {W}_m \in \mathcal{W}, a_k\in \mathcal{A}^{l}\}$;
+\item $c^m_k$ is \emph{true} when the collaborative behavior~$C_k$ in~\eqref{eq:c-k} is performed at region $W_m$.
+Let $\mathbf{c} \triangleq\{c^m_k,\forall C_k \in \mathcal{C},\forall {W}_m \in {\mathcal{W}}\}$.
+\end{itemize}
+
+Given these propositions, a team-wide task specification can be specified as a sc-LTL formula
+\begin{equation}\label{eq:task}
+\varphi=\textup{sc-LTL}(\{\mathbf{p}, \mathbf{a}, \mathbf{c}\}),
+\end{equation}
+where the syntax of sc-LTL is introduced in Sec.~\ref{subsec:LTL}.
+Denote by~$t_0,\, t_f>0$ the time instants when the system starts
+and satisfies executing~$\varphi$, respectively.
+Thus, the total time taken for the multi-agent team to satisfy~$\varphi$ is given by:
+\begin{equation}\label{eq:task-freq}
+T_\varphi = t_f-t_0.
+\end{equation}
+Since a sc-LTL can be satisfied in finite time, this total duration is finite and thus can be optimized. 
+
+
+%==============================
+\subsection{Problem Statement}\label{subsec:problem-statement}
+
+\begin{problem}\label{prob:formulation}
+Given the task specification~$\varphi$,
+synthesize the motion and action
+sequence for each agent $n\in \mathcal{N}$,
+such that~$T_{\varphi}$ in~\eqref{eq:task-freq} is minimized.
+\hfill $\blacksquare$
+\end{problem}
