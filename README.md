@@ -1,1 +1,1 @@
-LTL-TAMP-Learning
+This repo contains the learning materials for LTL-based Task and Motion Planning (TAMP).
